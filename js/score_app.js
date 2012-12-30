@@ -31,6 +31,10 @@ $(function(){
         google_calc_to_array);
     };
 
+    var showAsFloat = function(n){
+        return !Number(n) ? n : Number(n)%1 === 0 ? Number(n).toFixed(2) : n;
+    }
+
     var google_calc_to_array = function(json) {
         //This function read the goolge calc json respond and convert it to js
         // arrays
@@ -44,8 +48,8 @@ $(function(){
                 if (entry['gsx$'+google_calc_team_column].$t != "") {
                     //Only add rows that have team names in them
                     $.each(google_calc_columns,function(i,field) {
-                        var tmp = entry['gsx$'+field].$t;
-                        line.push(entry['gsx$'+field].$t);
+
+                        line.push(showAsFloat(entry['gsx$'+field].$t.replace(',','.')));
                     });
                     tmp_score.push(line);
                 }
@@ -96,20 +100,66 @@ $(function(){
         //Convert an array to an html table
         var table =  $('.template').clone();
         table.removeClass('template');
-        table.attr('id', 'score');
+        table.addClass('score');
         var tBody = $(table[0].tBodies[0]);
 
         $.each(array, function(i, line){
             var row = $('<tr/>');
+
             $.each(google_calc_default_view, function(j, value){
-                var tmp = array[value];
-                row.append($('<td />', {
+
+                var cell = $('<td />', {
                     text: line[value],
                     css: {
                         textAlign: 'left',
                     }
-                }));
+                });
+                if (value == 2) {
+                    var details = $('<div/>', {
+                        class: 'popup',
+                        html: "<span class='bClose'><span>X</span></span>\n" +
+                        "<b>" + line[2] + "</b>" +
+                        "<table class='score'><thead>" +
+                        "<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>Total</th></tr>" +
+                        "</thead><tbody>" +
+                        "<tr>" +
+                        "<th>Hopp</th><td>" + line[3] +
+                        "</td><td>" + line[4] +
+                        "</td><td>" + line[5] +
+                        "</td><td>" + line[6] +
+                        "</td><td>" + line[7] +
+                        "</td></tr>" +
+                        "<tr>" +
+                        "<th>Matta</th><td>" + line[8] +
+                        "</td><td>" + line[9] +
+                        "</td><td>" + line[10] +
+                        "</td><td>" + line[11] +
+                        "</td><td>" + line[12] +
+                        "</td></tr>" +
+                        "<tr>" +
+                        "<th>Golv</th><td>" + line[13] +
+                        "</td><td>" + line[14] +
+                        "</td><td>" + line[15] +
+                        "</td><td>" + line[16] +
+                        "</td><td>" + line[17] +
+                        "</td></tr>" +
+                        "</table>"
+                    });
+                    cell.append(details);
+                    cell.on('click',function(e) {
+                        e.preventDefault();
+                        details.bPopup({
+                            fadeSpeed: 'fast', //can be a string ('slow'/'fast') or int
+                            follow: [false,false],
+                            modalColor: '#b9c9fe',
+                             position: [0, 'auto']
+                            });
+                });
+                }
+
+                row.append(cell);
             });
+
             tBody.append(row);
         });
         return table;
