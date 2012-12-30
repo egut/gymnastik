@@ -1,0 +1,89 @@
+<html>
+<head>
+    <title>Truppgymnastik - poäng</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/dataTables.js"></script>
+    <!-- <script type="text/javascript" src="js/score_app.js"></script> -->
+    <script type="text/javascript">
+    var google_calc_id="0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc";
+    var google_spreadcheet_id="od6"; //od6 is normaly the first tab
+    </script>
+    <script type="text/javascript">
+
+
+        $(document).ready(function(){
+            $('#example').dataTable( {
+            "aaSorting": [[ 0]],
+
+            });
+        });
+
+    /*
+    $(document).ready(function() {
+    $(function readResult() {
+    $.getJSON( 'http://spreadsheets.google.com/feeds/list'
+                 + '/' + google_calc_id
+                 + '/' + google_spreadcheet_id + '/public/values' +
+                '?alt=json-in-script&callback=?',
+
+);
+        });
+    });
+    */
+</script>
+<style>
+    #result {
+        border: 1px solid black;
+    }
+
+    #result thead {
+        background-color:#9999FF;
+        padding: 0px;
+        margin: 0px;
+    }
+
+    #result td {
+        padding: 0px;
+        margin: 0px;
+    }
+
+</style>
+
+</head>
+<body>
+
+
+    <table id="result">
+    <thead>
+        <tr>
+            <td>#</td>
+            <td>Team</td>
+            <td>Poäng</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>1</td>
+            <td>Lag 1</td>
+            <td>12</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Lag 2</td>
+            <td>11</td>
+        </tr>
+    </tbody>
+    </table>
+
+
+    <table>
+        <tbody id="result"></tbody>
+    </table>
+
+    <table>
+        <tbody id="dataTBODY"></tbody>
+    </table>
+</body>
+
+</html>
