@@ -1,105 +1,154 @@
 ﻿
-/***** OLD CODE *****/
-var columns = Array();
+var google_calc_id="0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc";
+var google_spreadcheet_id="od6"; //od6 is normaly the first tab
 
-function showResult(json) {
-  var entry = json.feed.entry[0];
-  for (var j in entry) {
-    var prefix = j.split("$")[0];
-    var column = j.split("$")[1];
-    if(prefix=="gsx") {
-    columns.push(column);
+//The array of array that have the raw data of the score table
+var score = new Array();
+var last_update_time = 0;
+var table;
+//Has the data been updated?
+var updated = false;
+$(function(){
+
+    //Note: Google remove upper case, : and space
+    var google_calc_columns = ['grupp','lag',
+        'hoppa',  'hoppb',  'hoppc',  'hoppd',  'hopptotalt',
+        'mattaa', 'mattab', 'mattac', 'mattad', 'mattatotalt',
+        'golva',  'golvb',  'golvc',  'golvd',  'golvtotalt',
+        'totalt']; //If this isn't 18 items, sorting need to be updated
+
+    var google_calc_team_column = 'lag';
+
+    //Fields from google_calc_columns, start from 1. 0 is position
+    var google_calc_default_view = [0,2,18];
+
+    var get_google_calc = function() {
+       // This function get the google spreadsheat
+       $.getJSON( 'http://spreadsheets.google.com/feeds/list'
+             + '/' + google_calc_id
+             + '/' + google_spreadcheet_id + '/public/values' +
+            '?alt=json-in-script&callback=?',
+        google_calc_to_array);
+    };
+
+    var google_calc_to_array = function(json) {
+        //This function read the goolge calc json respond and convert it to js
+        // arrays
+
+        var tmp_score=new Array();
+        if (last_update_time != json.feed.updated.$t) {
+            last_update_time = json.feed.updated.$t;
+            updated = true;
+            $.each(json.feed.entry, function(i,entry) {
+                var line = [0]; //First field is always position
+                if (entry['gsx$'+google_calc_team_column].$t != "") {
+                    //Only add rows that have team names in them
+                    $.each(google_calc_columns,function(i,field) {
+                        var tmp = entry['gsx$'+field].$t;
+                        line.push(entry['gsx$'+field].$t);
+                    });
+                    tmp_score.push(line);
+                }
+            });
+            score = calc_position(tmp_score, 'OneWinnerNoFinal');
+        }
+        if (! table) {
+            table = array_to_table(score).show();
+            $('.score').append(table);
+        }
+    };
+
+    var sortingFuncs = {
+        number: function(i, j){
+            return i - j;
+        },
+        string: function(i, j){
+            return (i > j) ? 1 : (i == j) ? 0 : -1;
+        }
+    };
+
+    var calc_position = function(array, contest_type) {
+        // This will calculate the position and change the first field to the
+        // right number
+        // TODO: Add contest type so we can calculate on the right way.
+
+        var sortingFunc = sortingFuncs.number;
+        if (contest_type == 'OneWinnerNoFinal') {
+            //sort the output..
+            array.sort(function(i, j){
+                field_i = i[18];
+                field_j = j[18];
+                //return (ascending) ? sortingFunc(i,j) : 0-sortingFunc(i,j);
+                return -sortingFunc(field_i,field_j);
+            });
+            $.each(array, function(i, line) {
+                //arrays start with 0 and we need to display from 1
+                line[0]=i+1;
+            });
+        } else {
+            alert('Okänd tävlingform, fix!');
+        }
+
+        return array;
     }
-  }
 
-  var t = document.getElementById("dataTBODY");
-  var th = document.createElement("tr");
-  // write out table header
-  var td = document.createElement("td");
-  var txt = document.createTextNode(" ");
-  td.style.backgroundColor = "DDDDDD";
-  td.style.fontWeight = "bold";
+    var array_to_table = function(array) {
+        //Convert an array to an html table
+        var table =  $('.template').clone();
+        table.removeClass('template');
+        table.attr('id', 'score');
+        var tBody = $(table[0].tBodies[0]);
 
-  td.appendChild(txt);
-  th.appendChild(td);
-  for (var i=0; i<columns.length; i++){
-     var td = document.createElement("td");
-     var txt = document.createTextNode(columns[i]);
-     td.style.backgroundColor = "#DDDDDD";
-     td.style.fontWeight = "bold";
-     td.appendChild(txt);
-     th.appendChild(td);
-  }
-  t.appendChild(th);
+        $.each(array, function(i, line){
+            var row = $('<tr/>');
+            $.each(google_calc_default_view, function(j, value){
+                var tmp = array[value];
+                row.append($('<td />', {
+                    text: line[value],
+                    css: {
+                        textAlign: 'left',
+                    }
+                }));
+            });
+            tBody.append(row);
+        });
+        return table;
+    };
 
-  // write out data rows
-  var dString = "";
-  for (var i = 0; i < json.feed.entry.length; i++) {
-    var tr = document.createElement("tr");
-    var entry = json.feed.entry[i];
-    var td = document.createElement("td");
-    var txt = document.createTextNode(i+1);
-    td.style.backgroundColor = "#EEEEEE";
-    td.appendChild(txt);
-    tr.appendChild(td);
-
-    for (var j=0; j<columns.length; j++){
-      eval("var cString = entry.gsx$"+columns[j]+".$t");
-      var td = document.createElement("td");
-      var txt = document.createTextNode(cString);
-      td.appendChild(txt);
-      tr.appendChild(td);
+    var update_table = function() {
+        //Process the array to an html table and apply needed extra data.
+        get_google_calc();
+        if (updated) {
+            var newTable = array_to_table(score);
+            table.rankingTableUpdate(newTable, {
+                duration: [1000,200,700,200,1000],
+                onComplete: function(){
+                    updated = false;
+                },
+                animationSettings: {
+                    up: {
+                        left: 0,
+                        backgroundColor: '#CCFFCC'
+                    },
+                    down: {
+                        left: 0,
+                        backgroundColor: '#FFCCCC'
+                    },
+                    fresh: {
+                        left: 0,
+                        backgroundColor: '#CCFFCC'
+                    },
+                    drop: {
+                        left: 0,
+                        backgroundColor: '#FFCCCC'
+                    }
+                }
+            });
+            table = newTable;
+             $('#status').html("Senast uppdaterad " + last_update_time);
+        }
     }
-   t.appendChild(tr);
-   // if we just reported 3rd row and table has more than 5 rows
-   if(i==2 && json.feed.entry.length >5) {
-      i=json.feed.entry.length-2;
-      var tr = document.createElement("tr");
-      var entry = json.feed.entry[i];
-      for (var j=0; j<columns.length+1; j++){
-    var cString = "...";
-        var td = document.createElement("td");
-        var txt = document.createTextNode(cString);
-    if(j==0) td.style.backgroundColor = "#EEEEEE";
-        td.appendChild(txt);
-        tr.appendChild(td);
-      }
-      t.appendChild(tr);
-   }
-  }
-
-}
-
-
-$(document).ready(function () {
-      // Retrieve the JSON feed.
-    var script = document.createElement('script');
-
-    script.setAttribute('src', 'http://spreadsheets.google.com/feeds/list'
-                         + '/' + google_calc_id
-                         + '/' + google_spreadcheet_id + '/public/values' +
-                        '?alt=json-in-script&callback=showResult');
-
-    script.setAttribute('id', 'jsonScript');
-    script.setAttribute('type', 'text/javascript');
-
-    $('head').append(script);
+    get_google_calc();
+    setInterval(update_table, 10000);
 });
 
-/***** OLD CODE END *****/
-
-
-function OneWinnerNoFinal(data) {
-    $('div#book-list').append('<ul class="items"></ul>');
-    $.each(data.feed.entry, function(i,entry) {
-        var item = '<span style="display:none">' + entry.id.$t + '</span>';
-        item += '<img src="http://covers.openlibrary.org/b/isbn/' + entry.gsx$isbn.$t + '-S.jpg"/>';
-        item += '<span class="meta"><a href="http://www.worldcat.org/isbn/' + entry.gsx$isbn.$t + '">' +
-        entry.title.$t + '</a>';
-        item += '<br/>Author: ' + entry.gsx$author.$t;
-        if (entry.gsx$notes.$t) {
-            item += '<br/>Description: ' + entry.gsx$notes.$t;
-        }
-        $('.items').append('<li>' + item + '</span></li>');
-        });
-    }

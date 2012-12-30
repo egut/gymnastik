@@ -1,0 +1,41 @@
+
+    html, body {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #score
+    {
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+        font-size: 20px;
+        text-align: left;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #score th
+    {
+        padding: 8px;
+        font-weight: bold;
+        font-size: 24px;
+        color: #039;
+        background: #b9c9fe;
+    }
+    #score td
+    {
+        padding: 8px;
+        background: #e8edff;
+        border-top: 1px solid #fff;
+        color: #669;
+    }
+
+    #score tbody tr:hover td
+    {
+        background: #d0dafd;
+    }
+
+    #status {
+        font-style:italic;
+        color: #777;
+    }
+    .template { display:none }
