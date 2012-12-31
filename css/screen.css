@@ -6,6 +6,18 @@
         font-size: 20px;
     }
 
+    #option {
+        color: #777;
+    }
+
+    #head {
+        color: #777;
+    }
+
+    .team {
+        width: 100%;
+    }
+
     .score
     {
         text-align: left;
