@@ -1,0 +1,72 @@
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>Truppgymnastik resultat - instruktioner</title>
+</head>
+<body>
+
+    <h1>Truppgymnastik resultat - Instruktioner</h1>
+    <p>
+    Denna sidan beskriver alla delar som man behöver göra för att använda truppgymnastik appen för tävlingresultat på en tävlingen.
+    </p>
+    <h1>Vad är detta?</h1>
+    <p>
+    Har en dotter som tränar och tävlar en del truppgymnastik och suttit på ett antal tävlingar när jag inte kunnat läsa resultatet på en projektor långt bort eller bara missar delar av poäng upläsningen. Därför har jag skapa denna webbapp som fungerar i mobiltelefoner och på en projektor. Den har även automatisk uppdatering så man får resultatet konternuelligt uppdaterat.
+    </p>
+
+    <p>
+    Som data källa används ett google kalkylark, vilken tävlingsledningen skriver in alla resultaten. Man behöver sätta en del rättigheter för att det skall fungera. Allt står i guiden nedan.
+    </p>
+
+    <p>
+    Andra halvan är en webbsida som man lägger upp på föreningens egen hemsida. Dennan delar man ut till alla som vill följa resultatet i sin mobiltelefon. Även i den behöver man göra en liten förändring. Allt står i guiden nedan.
+    </p>
+    <h1>Guid</h1>
+
+    <ol>
+        <li>Logga in på ditt  <a  target="_blank" href="https://docs.google.com" >google konto</a>, har du inget får du skapa ett.</li>
+        <li>Öppna detta google kalkylark: <a  target="_blank" href="https://docs.google.com/spreadsheet/ccc?key=0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc#gid=0">https://docs.google.com/spreadsheet/ccc?key=0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc#gid=0</a></li>
+        <li>I Arkiv-menyn ifrån Google Docs (inte i webbläsaren) välj 'Kopiera...' väj ett namn du gillar.</li>
+        <li>Nu har du en egen kopia av kalkylarket. Det finns en del saker som webbappen förväntar sig att skall finnas i kalkylarket. <a href="#limits">Begränsingar i kalkylarket</a></li>
+        <li>För att webbappen skall få hämta data ifrån kalkylarket behöver man ändra 2 rättigheter.
+            <b>Publik läsbehörighet av dokumentet</b>
+            <ol>
+                <li>Klicka på "Dela" knappen uppe till höger</li>
+                <li>I listan "Vem har åtkomst" klicka på "Ändra..." på posten "Privat - enbart personer..."</li>
+                <li>Välj "Alla med länken"</li>
+                <li>Klicka på spara</li>
+                <li>Valbart: Du kan nu lägga till alla i tävlingslednignen som skall få ändra i dokumentet, flera kan ändra samtidigt!</li>
+                <li>Klicka på "Klart"</li>
+            </ol>
+            <br />
+            <b>Publicera på webben</b>
+            <ol>
+                <li>Klicka på "Arkiv" i google doc (inte webbläsaren)</li>
+                <li>Klicka på "Publicera på webben..."</li>
+                <li>Klicka på knappen "Inled publicering" och OK i dialogrutan som kommer upp</li>
+                <li>Klicka på "Stäng"</li>
+            </ol>
+        </li>
+        <li>Nu bör dokumentet vara utdelat på rätt sätt, nu behöver man bara lägga in rätt dokument i index.html sidan
+        </li>
+        <li>Öppna index.html i en editor, inte i word eller annan ordbehandlare. Notepad fungerar bra.</li>
+        <li>Leta upp raden som börjar <b>var google_calc_id=</b> inom " behöver du stoppa in googles reference till ditt kalkylark. Kollar du på länken i din webbläsare står det ungefär:<br />
+        <tt>https://docs.google.com/spreadsheet/ccc?key=<b>0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc</b>#gid=0</tt><br /> det som  är markerat med fetstil är googles reference till dokumentet. Det är det du skall kopiera och stoppa in inom " på raden med google_calc_id.</li>
+        <li>Spara dokumentet</li>
+        <li>Nu är du klar och bör kunna använda webbappen.</li>
+    </ol>
+
+    <a name="limits"></a>
+    <h1>Begränsningar i kalkylarket</h1>
+    <p>
+    <ul>
+        <li>Första raden på fliken <b>Tävlingspoäng</b> sidan <b>måste innehålla exakt de namnen</b>. Webbappen förväntar sig att de heter så och om de inte finns kommer webbappen inte att fungera som den skall.</li>
+        <li>Första kolumnen på fliken <b>Intern extra data</b> innehåller grupp namnen, ändra namnen efter behov.</li>
+        <li>Bara rader som innehåller ett lagnamn kommer att dyka upp i webbappen.</li>
+        <li></li>
+    </ul>
+    </p>
+</body>
+</html>
