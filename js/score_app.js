@@ -6,8 +6,13 @@ var table;
 //Has the data been updated?
 var updated = false;
 
+//Filter on groups
 var group_filter='all';
 var group_list = new Array();
+
+//Update interval
+var update_interval = 60000; //Default every minute
+var interval_timer = 0; //So we can stop and restart the timer
 
 //Note: Google remove upper case, : and space
 var google_calc_columns = ['grupp','lag',
@@ -21,6 +26,10 @@ var google_calc_team_column = 'lag';
 //Fields from google_calc_columns, start from 1. 0 is position
 var google_calc_default_view = [0,2,18];
 
+
+
+
+$.ajaxSetup( { "async": false } );
 var get_google_calc = function() {
    // This function get the google spreadsheat
    $.getJSON( 'http://spreadsheets.google.com/feeds/list'
@@ -31,7 +40,12 @@ var get_google_calc = function() {
 };
 
 var showAsFloat = function(n){
-    return !Number(n) ? n : Number(n)%1 === 0 ? Number(n).toFixed(2) : n;
+    if (isNaN(n)) {
+        return n
+    } else {
+        num = Number(n)%1 == 0 ? Number(n).toFixed(2) : n;
+        return (num%1+"").length < 5 ? Number(n).toFixed(2) : n;
+    }
 }
 
 var google_calc_to_array = function(json) {
@@ -73,6 +87,7 @@ var google_calc_to_array = function(json) {
         group_list = $.grep(group_list, function(v, k){
             return $.inArray(v ,group_list) === k;
         });
+        group_list.sort();
         add_group_filter();
         //Calc position depending on contest type
         score = calc_position(tmp_score, contest_type);
@@ -96,7 +111,7 @@ var sortingFuncs = {
 var calc_position = function(array, contest_type) {
     // This will calculate the position and change the first field to the
     // right number
-    // TODO: Add contest type so we can calculate on the right way.
+
 
     var sortingFunc = sortingFuncs.number;
     if (contest_type == 'OneWinnerNoFinal') {
@@ -144,7 +159,7 @@ var array_to_table = function(array) {
                     var details = $('<div/>', {
                         class: 'popup',
                         html: "<span class='bClose'><span>X</span></span>\n" +
-                        "<b>" + line[2] + "</b>" +
+                        "<h2>" + line[1] + ": " + line[2] + "</h2>" +
                         "<table class='score'><thead>" +
                         "<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>Total</th></tr>" +
                         "</thead><tbody>" +
@@ -176,9 +191,10 @@ var array_to_table = function(array) {
                         e.preventDefault();
                         details.bPopup({
                             fadeSpeed: 'fast', //can be a string ('slow'/'fast') or int
-                            follow: [false,false],
+                            follow: [false, false],
                             modalColor: '#b9c9fe',
-                            positionStyle: 'fixed'
+                            positionStyle: 'fixed',
+                            amsl: 500,
                             });
                     });
                 }
@@ -200,6 +216,11 @@ var update_table = function() {
             duration: [1000,200,700,200,1000],
             onComplete: function(){
                 updated = false;
+                if(group_filter != 'all') {
+                    $('#team').html(group_filter);
+                } else {
+                    $('#team').html("Alla lag");
+                }
             },
             animationSettings: {
                 up: {
@@ -221,8 +242,13 @@ var update_table = function() {
             }
         });
         table = newTable;
-         $('#status').html("Senast uppdaterad " + last_update_time);
+        modify_date = new Date();
+        modify_date.setISO8601(last_update_time);
+         $('#status').html("Senast modifierat: " +
+            modify_date.toLocaleDateString() + " " +
+            modify_date.toLocaleTimeString());
     }
+    return false;
 }
 
 var add_group_filter = function() {
@@ -233,28 +259,65 @@ var add_group_filter = function() {
     var option = $('<option/>',{value: 'all', text: 'Alla'});
     select.append(option);
 
-    $.each(group_list, function(i, value){
-        var option = $('<option/>',{value: value, text: value});
-        select.append(option);
+    $.each(group_list, function(i, value) {
+        //Select prev selected when regenerate list.
+        if (value == group_filter) {
+            var option = $('<option/>',{selected: true, value: value, text: value});
+            select.append(option);
+        } else {
+            var option = $('<option/>',{value: value, text: value});
+            select.append(option);
+        }
     });
-    $('#option').append('Välj grupp: ');
-    $('#option').html(select);
+    $('#group_filter').append('Välj grupp: ');
+    $('#group_filter').html(select);
 }
 
 var set_group_filter = function() {
     //Set and update filter
     group_filter=$("#group_list_value").val();
-    if(group_filter != 'all') {
-        $('#head').html("Grupp: " + group_filter);
-    } else {
-        $('#head').html("Alla lag");
-    }
+
     updated=true;
     update_table();
 
 }
+
+var set_update_interval = function() {
+    update_interval=$("#update_time_value").val();
+    clearInterval(interval_timer);
+    setInterval(update_table, update_interval);
+}
+
+
+//http://delete.me.uk/2005/03/iso8601.html
+Date.prototype.setISO8601 = function (string) {
+    var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" +
+        "(T([0-9]{2}):([0-9]{2})(:([0-9]{2})(\.([0-9]+))?)?" +
+        "(Z|(([-+])([0-9]{2}):([0-9]{2})))?)?)?)?";
+    var d = string.match(new RegExp(regexp));
+
+    var offset = 0;
+    var date = new Date(d[1], 0, 1);
+
+    if (d[3]) { date.setMonth(d[3] - 1); }
+    if (d[5]) { date.setDate(d[5]); }
+    if (d[7]) { date.setHours(d[7]); }
+    if (d[8]) { date.setMinutes(d[8]); }
+    if (d[10]) { date.setSeconds(d[10]); }
+    if (d[12]) { date.setMilliseconds(Number("0." + d[12]) * 1000); }
+    if (d[14]) {
+        offset = (Number(d[16]) * 60) + Number(d[17]);
+        offset *= ((d[15] == '-') ? 1 : -1);
+    }
+
+    offset -= date.getTimezoneOffset();
+    time = (Number(date) + (offset * 60 * 1000));
+    this.setTime(Number(time));
+}
+
+
 $(document).ready(function() {
     get_google_calc();
-    setInterval(update_table, 10000);
+    interval_timer = setInterval(update_table, update_interval);
 });
 

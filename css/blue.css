@@ -4,14 +4,11 @@
         padding: 0px;
         font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
         font-size: 20px;
+        background-color: #CCC;
     }
 
     #option {
-        color: #777;
-    }
-
-    #head {
-        color: #777;
+        border-top: 1px solid black;
     }
 
     .team {
@@ -22,6 +19,7 @@
     {
         text-align: left;
         width: 100%;
+        background-color: #FFF;
         border-collapse: collapse;
     }
 
@@ -58,9 +56,17 @@
         color:#000;
         display:none;
         padding:20px;
+        margin-left: 10px;
+        margin-right: 20px;
         font-size: 15px;
     }
 
+    .popup h2 {
+        padding: 8px;
+        font-weight: bold;
+        color: #039;
+        font-size: 15px;
+    }
     .bClose {
         border-radius: 7px 7px 7px 7px;
         background-color: #b9c9fe;

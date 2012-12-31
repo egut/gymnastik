@@ -15,20 +15,32 @@
     </script>
 
 
-    <link rel="stylesheet" href="css/screen.css" type="text/css"/>
+    <link rel="stylesheet" href="css/blue.css" type="text/css"/>
 
 </head>
 <body>
-<div id="head">Alla lag</div>
 <div class="score"></div>
-<span id="status">Uppdating...</span>
-<div id="option"></div>
+
+<div id="option">
+<span id="status"></span>
+<form>
+    <span id='group_filter'></span>
+    <span id='update_time'>
+        <select id="update_time_value" onChange='set_update_interval()' >
+            <option value="60000">Uppdatera var minut</option>
+            <option value="300000">Uppdatera var 5 minut</option>
+            <option value="600000">Uppdatera var 10 minut</option>
+        </select>
+    </span>
+    <span><button onClick="return update_table();">Updatera nu</button></span>
+</form>
+</div>
 
 <table class="template">
     <thead>
         <tr>
             <th class="position anim:position">#</th>
-            <th class="team anim:id">Lag</th>
+            <th class="team anim:id" id="team">Alla lag</th>
             <th class="points anim:update">Poäng</th>
         </tr>
     </thead>
@@ -38,9 +50,8 @@
 
 <!-- *** TODO ***
 
- * Always view with atleast 2 decimals
  * Add different winner mode
- * Add update time
+
 -->
 </body>
 </html>
