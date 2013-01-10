@@ -4,69 +4,432 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <title>Truppgymnastik resultat - instruktioner</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no,initial-scale=1.0" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.cycle.all.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('.slideshow')
+        .after('<div id="nav">')
+        .cycle({
+            fx:    'scrollLeft',
+            timeout: 0,
+            pager:  '#nav',
+        });
+    });
+    </script>
+    <style type="text/css">
+    html, body {
+        margin: 0px;
+        padding: 0px;
+        font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+        font-size: 20px;
+        background-color: #CCC;
+    }
+
+    .slideshow{
+        width: 85%;
+        height: 85%;
+        border: 1px solid black;
+        padding: 10px 20px 10px 20px;
+        margin: 10px 10% 10px 5% ;
+        background-color:#fff;
+        border-radius:15px;
+        color:#000;
+        font-size: 15px;}
+
+    .slideshow div {
+        margin: 30px;
+        width: 90%;
+        }
+
+    .slideshow strong {
+        border-radius: 7px 7px 7px 7px;
+        background-color: #b9c9fe;
+        font: bold 131% sans-serif;
+        padding: 0 6px 2px;
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        border: 1px solid white;
+    }
+
+    .slideshow h1 {
+        margin-left: 90px;
+    }
+
+    #nav { margin: 10px 10% 10px 5% ;
+    }
+    #nav a {
+        border-radius: 7px 7px 7px 7px;
+        background-color: #b9c9fe;
+        font: bold 100% sans-serif;
+        padding: 6px 8px 6px 6px;
+        margin: 2px;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+        border: 1px solid white;
+        width: 20px;
+    }
+
+    #nav a.activeSlide { background: #ea0 }
+    #nav a:focus { outline: none; }
+
+
+    </style>
 </head>
 <body>
 
-    <h1>Truppgymnastik resultat - Instruktioner</h1>
-    <p>
-    Denna sidan beskriver alla delar som man behöver göra för att använda truppgymnastik appen för tävlingresultat på en tävlingen.
-    </p>
-    <h1>Vad är detta?</h1>
-    <p>
-    Har en dotter som tränar och tävlar en del truppgymnastik och suttit på ett antal tävlingar när jag inte kunnat läsa resultatet på en projektor långt bort eller bara missar delar av poäng upläsningen. Därför har jag skapa denna webbapp som fungerar i mobiltelefoner och på en projektor. Den har även automatisk uppdatering så man får resultatet konternuelligt uppdaterat.
-    </p>
 
-    <p>
-    Som data källa används ett google kalkylark, vilken tävlingsledningen skriver in alla resultaten. Man behöver sätta en del rättigheter för att det skall fungera. Allt står i guiden nedan.
-    </p>
+    <div class="slideshow">
+        <div>
+        <strong>1</strong>
+        <h1>Truppgymnastik tävlingsreultats Appen</h1>
+        <p>
+        Detta är en lite smidig app för att pressentera ett uppdaterat tävlingsresultatet både på projektor och i smartphones, som android iphones och windows phones. Appen är designad med minimala systemkrav och bör fungera för nästan vilken hemsida som helst <i>*peppar*peppar*</i>.
+        </p>
 
-    <p>
-    Andra halvan är en webbsida som man lägger upp på föreningens egen hemsida. Dennan delar man ut till alla som vill följa resultatet i sin mobiltelefon. Även i den behöver man göra en liten förändring. Allt står i guiden nedan.
-    </p>
-    <h1>Guid</h1>
+        <h2>Hur den fungerar</h2>
+        <p>Appen består av två delar.</p>
 
-    <ol>
-        <li>Logga in på ditt  <a  target="_blank" href="https://docs.google.com" >google konto</a>, har du inget får du skapa ett.</li>
-        <li>Öppna detta google kalkylark: <a  target="_blank" href="https://docs.google.com/spreadsheet/ccc?key=0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc#gid=0">https://docs.google.com/spreadsheet/ccc?key=0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc#gid=0</a></li>
-        <li>I Arkiv-menyn ifrån Google Docs (inte i webbläsaren) välj 'Kopiera...' väj ett namn du gillar.</li>
-        <li>Nu har du en egen kopia av kalkylarket. Det finns en del saker som webbappen förväntar sig att skall finnas i kalkylarket. <a href="#limits">Begränsingar i kalkylarket</a></li>
-        <li>För att webbappen skall få hämta data ifrån kalkylarket behöver man ändra 2 rättigheter.
-            <b>Publik läsbehörighet av dokumentet</b>
-            <ol>
-                <li>Klicka på "Dela" knappen uppe till höger</li>
-                <li>I listan "Vem har åtkomst" klicka på "Ändra..." på posten "Privat - enbart personer..."</li>
-                <li>Välj "Alla med länken"</li>
-                <li>Klicka på spara</li>
-                <li>Valbart: Du kan nu lägga till alla i tävlingslednignen som skall få ändra i dokumentet, flera kan ändra samtidigt!</li>
-                <li>Klicka på "Klart"</li>
-            </ol>
-            <br />
-            <b>Publicera på webben</b>
-            <ol>
-                <li>Klicka på "Arkiv" i google doc (inte webbläsaren)</li>
-                <li>Klicka på "Publicera på webben..."</li>
-                <li>Klicka på knappen "Inled publicering" och OK i dialogrutan som kommer upp</li>
-                <li>Klicka på "Stäng"</li>
-            </ol>
-        </li>
-        <li>Nu bör dokumentet vara utdelat på rätt sätt, nu behöver man bara lägga in rätt dokument i index.html sidan
-        </li>
-        <li>Öppna index.html i en editor, inte i word eller annan ordbehandlare. Notepad fungerar bra.</li>
-        <li>Leta upp raden som börjar <b>var google_calc_id=</b> inom " behöver du stoppa in googles reference till ditt kalkylark. Kollar du på länken i din webbläsare står det ungefär:<br />
-        <tt>https://docs.google.com/spreadsheet/ccc?key=<b>0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc</b>#gid=0</tt><br /> det som  är markerat med fetstil är googles reference till dokumentet. Det är det du skall kopiera och stoppa in inom " på raden med google_calc_id.</li>
-        <li>Spara dokumentet</li>
-        <li>Nu är du klar och bör kunna använda webbappen.</li>
-    </ol>
+        <h3>Webbsida</h3>
+        <p>Dels ett par filer som läggs på föreninges hemsida. Det går även bra att lägga dem någon annanstans. Det viktiga är alla som vill se resultatet får redan på länken.</p>
 
-    <a name="limits"></a>
-    <h1>Begränsningar i kalkylarket</h1>
-    <p>
-    <ul>
-        <li>Första raden på fliken <b>Tävlingspoäng</b> sidan <b>måste innehålla exakt de namnen</b>. Webbappen förväntar sig att de heter så och om de inte finns kommer webbappen inte att fungera som den skall.</li>
-        <li>Första kolumnen på fliken <b>Intern extra data</b> innehåller grupp namnen, ändra namnen efter behov.</li>
-        <li>Bara rader som innehåller ett lagnamn kommer att dyka upp i webbappen.</li>
-        <li></li>
-    </ul>
-    </p>
+        <h3>Google Spreadsheet</h3>
+         Dels ett Google Spreadsheet eller om du så vill Google Calc. Tävlingsledningen fyller i Google Spreadsheet med tävlingsresultet. Webbappen kommer då att automatiskt uppdatera resultatet både i mobiltelefoner och till projektorn.
+        </p>
+        </div>
+
+        <div>
+        <strong>2</strong>
+        <h1>Konfigurera Google Spreadsheet, steg 1</h1>
+        <p>
+            <ul>
+                <li>Börja med att logga in på dit google konto, har du inget får du skapa ett.</li>
+                <li>Öppna sedan detta kalkylarket <a  target="_blank" href="https://docs.google.com/spreadsheet/ccc?key=0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc#gid=0">https://docs.google.com/spreadsheet/ccc?key=0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc#gid=0</a> i din webbläsare.
+                </li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc1.png"><img height="400px" src="images/calc1.png" alt="Orginal kalkylark för tävlingsresultat" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>3</strong>
+        <h1>Konfigurera Google Spreadsheet, steg 2</h1>
+        <p>
+            <ul>
+                <li>I Google Spreadsheet på webbsidna klicka på <b>Arkiv</b> och välj <b>Kopiera...</b></li>
+                <li>Fyll i ett namn på kalkylarket som du gillar</li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc2.png"><img height="400px" src="images/calc2.png" alt="Orginal kalkylark för tävlingsresultat - kopierings dialogen" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>4</strong>
+        <h1>Konfigurera Google Spreadsheet, steg 3</h1>
+        <p>
+            <ul>
+                <li>Fyll även i kryssrutan för "Kopiera även redigeringsbehörighet för dokumentet"</li>
+                <li>Klicka sendan på OK</li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc2a.png"><img height="400px" src="images/calc2a.png" alt="Orginal kalkylark för tävlingsresultat - kopierings dialogen, kryssrutan ifylld" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>5</strong>
+        <h1>Konfigurera Google Spreadsheet, steg 4</h1>
+        <p>
+            <ul>
+                <li>I det nya kalkyarket klicka på knappen <b>Dela</b> uppe till höger.</li>
+                <li>Kontrollera att det står "Alla som får länken kan <b>visa den</b>"</li>
+                <li>Lägg till andra som skall kunna redigera dokumentet. Du kan även senare lägga till andra som skall få visa/redigera kalkylarket.</li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc2c.png"><img height="400px" src="images/calc2c.png" alt="Nytt kalkylark för tävlingsresultat - delingsrättigheter" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>6</strong>
+        <h1>Konfigurera Google Spreadsheet, steg 5</h1>
+        <p>
+            <ul>
+                <li>Lägg till andra som skall kunna redigera dokumentet. Du kan även senare lägga till andra som skall få visa/redigera kalkylarket.</li>
+                <li>Klicka sedan på "Dela och Spara" </li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc2d.png"><img height="400px" src="images/calc2d.png" alt="Nytt kalkylark för tävlingsresultat - delingsrättigheter" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>7</strong>
+        <h1>Konfigurera Google Spreadsheet, steg 6</h1>
+        <p>
+            <ul>
+                <li>I det nya kalkyarket öppna Arkiv menyn och väl "Publicera på webben..."
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc3a.png"><img height="400px" src="images/calc3a.png" alt="Nytt kalkylark för tävlingsresultat - publicera på webben, inled" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>8</strong>
+        <h1>Konfigurera Google Spreadsheet, steg 7</h1>
+        <p>
+            <ul>
+                <li>Klicka på "Inled publicering"</li>
+                <li>Tryck sedan på "Stäng"</li>
+                <li>Nu är konfigureringen av kalkylarket klart!</li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc3b.png"><img height="400px" src="images/calc3b.png" alt="Nytt kalkylark för tävlingsresultat - publicera på webben, klar" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>9</strong>
+        <h1>Konfigurera Webbappen, steg 1</h1>
+        <p>
+            <ul>
+                <li>Öppna filen som heter <tt>index.html</tt> i en text editor så att du kan redigera html koden direkt. Använd <b>inte</b> Word eller andra ordbehandlare. Öppnar du med en html-editor se då till att du kan redigera javascript i den och att den <b>INTE</b> modifierar övrig kod på sidan. Det fungerar utmärkt med <tt>notepad</tt>.</li>
+                <li>Ta bort den markerade koden efter <tt>google_calc_id=</tt>. Det som skall ändra är googles identiferare till det nya kalkyarket</li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc5a.png"><img height="400px" src="images/calc5a.png" alt="Redigera webbappen" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>10</strong>
+        <h1>Konfigurera Webbappen, steg 2</h1>
+        <p>
+            <ul>
+                <li>Den nya koden som skall stoppas in hittar du i din webbläsare när du har det nya kalkyarket öppet.</li>
+                <li>Öppna kalkylarket och kopiera den markerade delen ur länken tex:<tt>https://docs.google.com/spreadsheet/ccc?key=<b>0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc</b>#gid=0</tt> varken = eller # skall kopieras med.</li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc5b.png"><img height="400px" src="images/calc5b.png" alt="Redigera webbappen - få tag på ny nyckel" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>11</strong>
+        <h1>Konfigurera Webbappen, steg 3</h1>
+        <p>
+            <ul>
+                <li>Ersätt med den nya koden i text editor.</li>
+                <li>Spara och stäng editorn</li>
+                <li>Nu är all konfigurering klar.</li>
+            </ul>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc5c.png"><img height="400px" src="images/calc5c.png" alt="Redigera webbappen - stoppa in nyckeln" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>12</strong>
+        <h1>Filer att installer på webbserven</h1>
+        <p>
+        Enklast är att kopiera in alla filerna i denna katalogen till en katalog på webbserven. Har siten ett CRM-system eller något annat sytem som genererar webbsidorna dynamiskt behöver man lägga dessa filerna så att webbserven skickar orörda (static files). Alla sökvägar i html sidan är relativa vilket betyder att filerna i js/ och css/ katalogerna skall ligga direkt samma katalog som html-filerna.
+        </p>
+
+        <h2>När det är klart</h2>
+
+        <p>
+        Om vi antar att vi lägger allt i en katalog som heter resultat på webbserven så blir det så här:
+        <tt>
+            <ul>
+                <li>resultat/
+                    <ul>
+                        <li>index.html</li>
+                        <li>readme.html</li>
+                        <li>css/
+                            <ul>
+                                <li>blue.css</li>
+                            </ul>
+                        </li>
+                        <li>js/
+                            <ul>
+                                <li>animator.js</li>
+                                <li>jquery.bpopup-0.7.0.min.js</li>
+                                <li>jquery.cycle.all.js</li>
+                                <li>jquery.js</li>
+                                <li>rankingTableUpdate.js</li>
+                                <li>score_app.js</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </tt>
+        </p>
+        <p>
+        Då blir webbadressen ungefär som denna: <b><tt>http://gymnastikförening.se/resultat/index.html</tt></b> (byt gymnastikförening.se emot vad er förenings hemsida heter.)
+        </p>
+        </div>
+
+        <div>
+        <strong>13</strong>
+        <h1>Hur man använder systemet</h1>
+        <p>
+        I första kolumnen anger man i vilken pool laget tillhör, man behöver inte ange poolerna i ordning, webbappen sorterar om dem rätt.
+        </p>
+        <p>
+        Webbappen kommer bara att visa de raderna som har ett lagnamn angivet om man ändrar lagnamnet kommer webbappen automatiskt att uppdatera namnet.
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc6a.png"><img height="400px" src="images/calc6a.png" alt="Använda kalkylarket, del 1" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>14</strong>
+        <h1>Hur man använder systemet</h1>
+        <p>
+        Webbappen kommer bara att visa de raderna som har ett lagnamn angivet om man ändrar lagnamnet kommer webbappen automatiskt att uppdatera namnet.
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc6b.png"><img height="400px" src="images/calc6a.png" alt="Använda kalkylarket, del 2" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>15</strong>
+        <h1>Begränsningar</h1>
+        <p>
+        Man får <b>inte</b> ändra rubrikerna, webbappen förväntar sig att de heter exakt som de gör. Om man ändrar namnen så kommer webbappen att sluta och fungera eller inte fungera som det är tänkt.
+        </p>
+        <p>
+        Har kallat de tre olika grenarna Hopp, Matta samt Golv. Valet av namn är flera
+        <ul>
+            <li>Namnen är korta och tar med andra ord så stor plats på mobilen. Där är plats en brist om det skall vara tydligt</li>
+            <li>Namnen är ungeför lika långa och gör att det blir snyggare layout</li>
+            <li>Hopp kallas även Trampet</li>
+            <li>Matta kallas även Tumbling</li>
+            <li>Golv kallas även Fristående</li>
+        </ul>
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc7.png"><img height="400px" src="images/calc7.png" alt="Använda kalkylarket, del 2" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>16</strong>
+        <h1>Begränsningar</h1>
+        <p>
+        Poäng kolumn D är över dommar poäng kolumnen. Den bör i normalfallet vara 0.
+        </p>
+        <p>
+        <b>Hopp Total</b>, <b>Matta Total</b> och <b>Golv Total</b> skall summeras över respektive A, B, C och D poäng.
+        </p>
+        <p>
+            <b>Totalt</b> är summan av Hopp Total, Matta Total och Golv Total
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc7b.png"><img height="400px" src="images/calc7b.png" alt="Använda kalkylarket, del 3" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>17</strong>
+        <h1>Webbappen</h1>
+        <p>
+        Webbappen kommer att automatiskt visa alla lag som har ett lagnamn. Den kommer regelbundet kontrollera om det kommit nya resultat och sortera om lagen i poängordning.
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc8a.png"><img height="400px" src="images/calc8a.png" alt="Använda Webbappen, del 1" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>18</strong>
+        <h1>Webbappen</h1>
+        <p>
+        I normal visar bara total poängen men vill man se mer detaljerad poängvisning klickar man på lagnamnet och får reda på alla poäng för respektive gren.
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc8b.png"><img height="400px" src="images/calc8b.png" alt="Använda Webbappen, del 2" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>19</strong>
+        <h1>Webbappen</h1>
+        <p>
+        Finns det flera pooler så kan man välja om man bara vill se en pool elle alla lagen. Man kan bara välja bland de poolerna som det finns lag för i kalkylarket.
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc8c.png"><img height="400px" src="images/calc8c.png" alt="Använda Webbappen, del 3" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>20</strong>
+        <h1>Webbappen</h1>
+        <p>
+        Man kan välja uppdateringsfrekven. Det man väljer är egentligen bara hur ofta webbappen skall kontroller om det har hänt något i kalkyarket. Har det inte hänt något i kalkyldokumentet kommer inte heller webbappen göra någon uppdateringar.
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc8d.png"><img height="400px" src="images/calc8d.png" alt="Använda Webbappen, del 4" /></a>
+        </p>
+        </div>
+
+        <div>
+        <strong>21</strong>
+        <h1>Webbappen</h1>
+        <p>
+       Är man stressad så kan kontroller om det hänt något nu! Åter igen är kalkylarket inte uppdaterat, händer inget.
+        </p>
+        <p>
+            Du bör se ut ungefär så här:<br />
+            <a target="_blank" href="images/calc8e.png"><img height="400px" src="images/calc8e.png" alt="Använda Webbappen, del 5" /></a>
+        </p>
+        </div>
+        <div>
+        <strong>20</strong>
+        <h1>QR Kod</h1>
+        <p>
+        För att alla på tävling skall kunna komma åt webbappen så rekommenderar jag att generera en QR-kod med en länk till webbappen som ni har satt upp.
+
+        En Google sökning gav bland annat dessa som kan generera QR-koder:
+        <ul>
+            <li><a href="http://www.barcodelink.net/" target="_blank">http://www.barcodelink.net/</a></li>
+            <li><a href="http://qrcode.kaywa.com/" target="_blank">http://qrcode.kaywa.com/</a></li>
+            <li><a href="http://www.i-nigma.com/createbarcodes.html" target="_blank">http://www.i-nigma.com/createbarcodes.html</a></li>
+        </ul>
+
+        Det finns många fler, välj en tryck upp massa affisher så att publiken kan få se resultatet.
+        </p>
+
+        </div>
+    </div>
 </body>
 </html>
