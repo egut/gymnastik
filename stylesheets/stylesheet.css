@@ -64,8 +64,8 @@ a:hover {
 }
 
 header {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
   background: #2e7bcf url(../images/header-bg.jpg) 0 0 repeat-x;
   border-bottom: solid 1px #275da1;
@@ -73,7 +73,7 @@ header {
 
 header h1 {
   letter-spacing: -1px;
-  font-size: 72px;
+  font-size: 48px;
   color: #fff;
   line-height: 1;
   margin-bottom: 0.2em;
@@ -101,6 +101,7 @@ header h2 {
 
 #main-content {
   width: 80%;
+  height: 100%;
   float: left;
 }
 
@@ -254,35 +255,16 @@ form {
   color: #474747;
 }
 
-h4:before {
-  content: "////";
-  color: #9ddcff;
-  padding-right: 0.3em;
-  margin-left: -2.8em;
-}
-
 #main-content h5 {
   font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
   font-size: 14px;
   color: #474747;
-}
-h5:before {
-  content: "/////";
-  color: #9ddcff;
-  padding-right: 0.3em;
-  margin-left: -3.2em;
 }
 
 #main-content h6 {
   font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
   font-size: .8em;
   color: #474747;
-}
-h6:before {
-  content: "//////";
-  color: #9ddcff;
-  padding-right: 0.3em;
-  margin-left: -3.7em;
 }
 
 p {
@@ -353,7 +335,7 @@ footer a:hover {
 
 .slideshow{
     width: 90%;
-    height: 400px;
+    height: 500px;
     border: 1px solid black;
     padding: 10px 10px 10px 10px;
     margin: 10px 10px 10px 10px ;
@@ -365,6 +347,13 @@ footer a:hover {
 .slideshow div {
     margin: 10px;
     width: 90%;
+    padding-left: 10px;
+
+    }
+
+.slideshow p {
+    margin: 10px;
+
     }
 
 .slideshow strong {
