@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>Truppgymnastik - poäng</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no,initial-scale=1.0" />
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/animator.js"></script>
+    <script type="text/javascript" src="js/rankingTableUpdate.js"></script>
+    <script type="text/javascript" src="js/score_app.js"></script>
+    <script type="text/javascript" src="js/jquery.bpopup-0.7.0.min.js" ></script>
+    <script type="text/javascript">
+    var google_calc_id="0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc";
+    var google_spreadcheet_id="od6"; //od6 is normaly the first tab
+    var contest_type='OneWinnerNoFinal';
+    </script>
+
+
+    <link rel="stylesheet" href="css/blue.css" type="text/css"/>
+
+</head>
+<body>
+<div class="score"></div>
+
+<div id="option">
+<span id="status"></span>
+<form>
+    <span id='group_filter'></span>
+    <span id='update_time'>
+        <select id="update_time_value" onChange='set_update_interval()' >
+            <option value="60000">Uppdatera var minut</option>
+            <option value="300000">Uppdatera var 5 minut</option>
+            <option value="600000">Uppdatera var 10 minut</option>
+        </select>
+    </span>
+    <span><button onClick="return update_table();">Updatera nu</button></span>
+</form>
+</div>
+
+<table class="template">
+    <thead>
+        <tr>
+            <th class="position anim:position">#</th>
+            <th class="team anim:id" id="team">Alla lag</th>
+            <th class="points anim:update">Poäng</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<!-- *** TODO ***
+
+ * Add different winner mode
+
+-->
+</body>
+</html>
