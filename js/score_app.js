@@ -126,10 +126,28 @@ var google_calc_to_array = function(json) {
 
             if (entry['gsx$'+google_calc_team_column].$t != "") {
                 //Only add rows that have team names in them
-                $.each(google_calc_columns,function(i,field) {
-                    line.push(showAsFloat(entry['gsx$'+field].$t.replace(',','.')));
-                });
-                tmp_score.push(line);
+                 if (contest_type == 'OneWinnerWithFinal') {
+                    if (group_filter != 'Final' && entry['gsx$grupp'].$t != 'Final') {
+                        $.each(google_calc_columns,function(i,field) {
+                            line.push(showAsFloat(entry['gsx$'+field].$t.replace(',','.')));
+                        });
+                        tmp_score.push(line);
+
+                    } else if (group_filter == 'Final' && entry['gsx$grupp'].$t == 'Final'){
+                        $.each(google_calc_columns,function(i,field) {
+                            line.push(showAsFloat(entry['gsx$'+field].$t.replace(',','.')));
+                        });
+                        tmp_score.push(line);
+                    }
+
+                } else {
+                    $.each(google_calc_columns,function(i,field) {
+                        line.push(showAsFloat(entry['gsx$'+field].$t.replace(',','.')));
+                    });
+                    tmp_score.push(line);
+            
+                }
+
             }
 
         });
@@ -223,7 +241,7 @@ var calc_position = function(array, contest_type) {
 
 
     var sortingFunc = sortingFuncs.number;
-    if (contest_type == 'OneWinnerNoFinal') {
+    if (contest_type == 'OneWinnerNoFinal' ) {
         //sort the output..
         array.sort(function(i, j){
             field_i = i[18];
@@ -234,12 +252,83 @@ var calc_position = function(array, contest_type) {
         $.each(array, function(i, line) {
             //arrays start with 0 and we need to display from 1
             line[0]=i+1;
+        });     
+    } else if (contest_type == 'OneWinnerWithFinal') {
+        //sort the output..
+        array.sort(function(i, j){
+            field_i = i[18];
+            field_j = j[18];
+            //return (ascending) ? sortingFunc(i,j) : 0-sortingFunc(i,j);
+            return -sortingFunc(field_i,field_j);
         });
+        $.each(array, function(i, line) {
+            //arrays start with 0 and we need to display from 1
+            line[0]=i+1;
+        });     
     } else {
         alert('Okänd tävlingform, fix!');
     }
 
     return array;
+}
+
+//Makes a table row out of an google calc line
+var line_to_row = function(line) {
+    var row = $('<tr/>');
+
+    $.each(google_calc_default_view, function(j, value){
+        var cell = $('<td />', {
+            text: line[value],
+            css: {
+                textAlign: 'left',
+            }
+        });
+        if (value == 2) {
+            var details = $('<div/>', {
+                class: 'popup',
+                html: "<span class='bClose'><span>X</span></span>\n" +
+                "<h2>" + line[1] + ": " + line[2] + "</h2>" +
+                "<table class='score'><thead>" +
+                "<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>Total</th></tr>" +
+                "</thead><tbody>" +
+                "<tr class='trampet'><th colspan='6'>Trampet</th></tr>" + 
+                "<tr class='trampet'><td></td><td>" + line[3] +
+                "</td><td>" + line[4] +
+                "</td><td>" + line[5] +
+                "</td><td>" + line[6] +
+                "</td><td><b>" + line[7] +
+                "</b></td></tr>" +
+                "<tr class='tambling'><th colspan='6'>Tambling</th></tr>" + 
+                "<tr class='tambling'><td></td><td>" + line[8] +
+                "</td><td>" + line[9] +
+                "</td><td>" + line[10] +
+                "</td><td>" + line[11] +
+                "</td><td><b>" + line[12] +
+                "</b></td></tr>" +
+                "<tr class='fristande'><th colspan='6'>Fristående</th></tr>" + 
+                "<tr class='fristande'><td></td><td>" + line[13] +
+                "</td><td>" + line[14] +
+                "</td><td>" + line[15] +
+                "</td><td>" + line[16] +
+                "</td><td><b>" + line[17] +
+                "</b></td></tr>" +
+                "</table>"
+            });
+            cell.append(details);
+            cell.on('click',function(e) {
+                e.preventDefault();
+                details.bPopup({
+                    fadeSpeed: 'fast', //can be a string ('slow'/'fast') or int
+                    follow: [false, false],
+                    modalColor: '#b9c9fe',
+                    positionStyle: 'fixed',
+                    amsl: 500,
+                    });
+            });
+        }
+        row.append(cell);
+    });
+    return row;    
 }
 
 var array_to_table = function(array) {
@@ -251,65 +340,23 @@ var array_to_table = function(array) {
 
     $.each(array, function(i, line){
 
-        if ( group_filter == 'all'  ||
-             group_filter == line[1] ) {
-             //If group_filer is defined use it or else all
+        if (contest_type == 'OneWinnerNoFinal') {
+            if ( group_filter == 'all'  ||
+                 group_filter == line[1] ) {
+                 //If group_filer is defined use it or else all
 
-            var row = $('<tr/>');
+                tBody.append(line_to_row(line));
+            }
+        } else if  (contest_type == 'OneWinnerWithFinal') {
+            //Treat Final pool different so we get the cases:
+            //all  == all exept Final
+            //<named pool> == named pool
+            //Final == only final (same as above)
+            if ( (group_filter == 'all'  && line[1] != 'Final')||
+                 group_filter == line[1] ) {
 
-            $.each(google_calc_default_view, function(j, value){
-                var cell = $('<td />', {
-                    text: line[value],
-                    css: {
-                        textAlign: 'left',
-                    }
-                });
-                if (value == 2) {
-                    var details = $('<div/>', {
-                        class: 'popup',
-                        html: "<span class='bClose'><span>X</span></span>\n" +
-                        "<h2>" + line[1] + ": " + line[2] + "</h2>" +
-                        "<table class='score'><thead>" +
-                        "<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>Total</th></tr>" +
-                        "</thead><tbody>" +
-                        "<tr class='trampet'><th colspan='6'>Trampet</th></tr>" + 
-                        "<tr class='trampet'><td></td><td>" + line[3] +
-                        "</td><td>" + line[4] +
-                        "</td><td>" + line[5] +
-                        "</td><td>" + line[6] +
-                        "</td><td><b>" + line[7] +
-                        "</b></td></tr>" +
-                        "<tr class='tambling'><th colspan='6'>Tambling</th></tr>" + 
-                        "<tr class='tambling'><td></td><td>" + line[8] +
-                        "</td><td>" + line[9] +
-                        "</td><td>" + line[10] +
-                        "</td><td>" + line[11] +
-                        "</td><td><b>" + line[12] +
-                        "</b></td></tr>" +
-                        "<tr class='fristande'><th colspan='6'>Fristående</th></tr>" + 
-                        "<tr class='fristande'><td></td><td>" + line[13] +
-                        "</td><td>" + line[14] +
-                        "</td><td>" + line[15] +
-                        "</td><td>" + line[16] +
-                        "</td><td><b>" + line[17] +
-                        "</b></td></tr>" +
-                        "</table>"
-                    });
-                    cell.append(details);
-                    cell.on('click',function(e) {
-                        e.preventDefault();
-                        details.bPopup({
-                            fadeSpeed: 'fast', //can be a string ('slow'/'fast') or int
-                            follow: [false, false],
-                            modalColor: '#b9c9fe',
-                            positionStyle: 'fixed',
-                            amsl: 500,
-                            });
-                    });
-                }
-                row.append(cell);
-            });
-            tBody.append(row);
+                tBody.append(line_to_row(line));
+            }  
         }
     });
     return table;
@@ -343,15 +390,15 @@ var add_group_filter = function() {
             select.append(option);
         }
     });
-    $('#group_filter').append('Välj grupp: ');
-    $('#group_filter').html(select);
+    $('.template .group_filter').html(select);
 }
 
 var set_group_filter = function() {
     //Set and update filter
     group_filter=$("#group_list_value").val();
-
     updated=true;
+    last_update_time="";
+    clearInterval(interval_timer);
     update_table();
 
 }

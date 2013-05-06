@@ -12,8 +12,11 @@ html, body {
     display: none;
 }
 
-#group_filter select {
-    font-size: 20px;    
+.group_filter select {
+    font-size: 16px;
+    font-weight: bold;
+    width: 10em;
+    padding: 0.25em;    
     color: #039;
     background-color: #b9c9fe;
     border-bottom: 1px solid #039; 
@@ -78,7 +81,7 @@ html, body {
 
 .score b {
     color: #039;
-    
+
 }
 
 
