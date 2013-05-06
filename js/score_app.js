@@ -55,13 +55,14 @@ var show_notification= function(html, error){
     $('#notification').fadeIn();
 }
 
-
+//If less then 3 decimals always return 2 else 3
 var showAsFloat = function(n){
     if (isNaN(n)) {
         return n
     } else {
-        num = Number(n)%1 == 0 ? Number(n).toFixed(2) : n;
-        return (num%1+"").length < 5 ? Number(n).toFixed(2) : n;
+        n2 = parseFloat(Math.round(n * 100));
+        n3 = parseFloat(Math.round(n * 1000));
+        return n3%10 == 0 ? (n2 / 100).toFixed(2)  : (n3 / 1000).toFixed(3); 
     }
 }
 
@@ -126,7 +127,6 @@ var google_calc_to_array = function(json) {
             if (entry['gsx$'+google_calc_team_column].$t != "") {
                 //Only add rows that have team names in them
                 $.each(google_calc_columns,function(i,field) {
-
                     line.push(showAsFloat(entry['gsx$'+field].$t.replace(',','.')));
                 });
                 tmp_score.push(line);
