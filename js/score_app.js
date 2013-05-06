@@ -5,7 +5,7 @@ var last_update_time = 0;
 var table;
 //Has the data been updated?
 var updated = false;
-
+var last_updated = 0;
 //Filter on groups
 var group_filter='all';
 var group_list = new Array();
@@ -26,18 +26,35 @@ var google_calc_team_column = 'lag';
 //Fields from google_calc_columns, start from 1. 0 is position
 var google_calc_default_view = [0,2,18];
 
+var notification_error = false;
+var get_google_calc_error = false;
+var hide_notification = function(html) {
 
+    show_notification(html);
 
+    if (! notification_error) {
+        setTimeout(function(){$('#notification').fadeOut('slow')}, 1000);
+    }
+}
 
-$.ajaxSetup( { "async": false } );
-var get_google_calc = function() {
-   // This function get the google spreadsheat
-   $.getJSON( 'http://spreadsheets.google.com/feeds/list'
-         + '/' + google_calc_id
-         + '/' + google_spreadcheet_id + '/public/values' +
-        '?alt=json-in-script&callback=?',
-    google_calc_to_array);
-};
+var show_notification= function(html, error){
+
+    console.log(html);
+    if (error) { 
+        notification_error = true;
+        html += '<form><button onClick="return update_table();">Prova igen</button></form>';
+        $('#notification').height('4em');
+
+    } else {
+        notification_error = false;
+        $('#notification').height('2em');
+        
+    }
+
+    $('#notification').html(html);
+    $('#notification').fadeIn();
+}
+
 
 var showAsFloat = function(n){
     if (isNaN(n)) {
@@ -48,10 +65,44 @@ var showAsFloat = function(n){
     }
 }
 
+var update_last_modified = function(timestamp) {
+    modify_date = new Date();
+    modify_date.setISO8601(timestamp);
+    $('#status').html("Senast ändrat: " +
+        modify_date.toLocaleDateString() + " " +
+        modify_date.toLocaleTimeString());
+}
+
+$.ajaxSetup( { "async": false } );
+
+//This function will start the call-back chain
+var get_google_calc = function() {
+
+    show_notification('Hämtar...');
+   // This function get the google spreadsheat
+   $.getJSON( 'http://spreadsheets.google.com/feeds/list'
+         + '/' + google_calc_id
+         + '/' + google_spreadcheet_id + '/public/values' +
+        '?alt=json-in-script&callback=?',
+        function(json) {
+            get_google_calc_error = false;
+            google_calc_to_array(json);
+        })
+   .fail(function() { 
+        get_google_calc_error = true;
+        show_notification('Hämtning misslyckades', error=true); 
+    });
+};
+
+// First step in the call-back-chain (if success in finding the document)
 var google_calc_to_array = function(json) {
     //This function read the goolge calc json respond and convert it to js
     // arrays
-
+    if (! table) {
+        show_notification('Skapar resultat listan')
+    } else {
+        show_notification('Uppdaterar...');
+    }
     var tmp_score=new Array();
     if (last_update_time != json.feed.updated.$t) {
         //When did the calc update last time
@@ -94,10 +145,73 @@ var google_calc_to_array = function(json) {
     }
     if (! table) {
         //First time add the table
-        table = array_to_table(score).show();
+        table = array_to_table(score).fadeIn();
         $('.score').append(table);
+
+        update_last_modified(last_update_time)   
+        hide_notification('Visar resultatet');
+        $('#option').fadeIn('slow');
+        //Reset updated timer as its the first time
+        updated = false;
+
+    } else {
+        //If there are an update to the table, 
+        //lets call the last step in the call-back chain
+        show_updated_table()
+        update_last_modified(last_update_time)
+
     }
+
+    //The last update
+    last_updated = new Date().getTime()
 };
+
+
+//Last step in call-back chain (An update in the table)
+var show_updated_table = function() {
+
+    if (updated) {
+        show_notification('Nytt resultat...');
+        updated = false;
+        var newTable = array_to_table(score);
+        table.rankingTableUpdate(newTable, {
+            duration: [1000,200,700,200,1000],
+            onComplete: function(){
+                updated = false;
+                if(group_filter != 'all') {
+                    $('#team').html(group_filter);
+                } else {
+                    $('#team').html("Alla lag");
+                }
+            },
+            animationSettings: {
+                up: {
+                    left: 0,
+                    backgroundColor: '#CCFFCC'
+                },
+                down: {
+                    left: 0,
+                    backgroundColor: '#FFCCCC'
+                },
+                fresh: {
+                    left: 0,
+                    backgroundColor: '#CCFFCC'
+                },
+                drop: {
+                    left: 0,
+                    backgroundColor: '#FFCCCC'
+                }
+            }
+        });
+        table = newTable;
+
+        hide_notification('Resultatet uppdateras...');
+    } else {
+        hide_notification('Inget att uppdatera');
+    }
+}
+
+
 
 var sortingFuncs = {
     number: function(i, j){
@@ -208,45 +322,10 @@ var array_to_table = function(array) {
 
 var update_table = function() {
     //Process the array to an html table and apply needed extra data.
+    show_notification('Kollar efter nya resultat...');
     get_google_calc();
-    if (updated) {
-        updated = false;
-        var newTable = array_to_table(score);
-        table.rankingTableUpdate(newTable, {
-            duration: [1000,200,700,200,1000],
-            onComplete: function(){
-                updated = false;
-                if(group_filter != 'all') {
-                    $('#team').html(group_filter);
-                } else {
-                    $('#team').html("Alla lag");
-                }
-            },
-            animationSettings: {
-                up: {
-                    left: 0,
-                    backgroundColor: '#CCFFCC'
-                },
-                down: {
-                    left: 0,
-                    backgroundColor: '#FFCCCC'
-                },
-                fresh: {
-                    left: 0,
-                    backgroundColor: '#CCFFCC'
-                },
-                drop: {
-                    left: 0,
-                    backgroundColor: '#FFCCCC'
-                }
-            }
-        });
-        table = newTable;
-        modify_date = new Date();
-        modify_date.setISO8601(last_update_time);
-         $('#status').html("Senast modifierat: " +
-            modify_date.toLocaleDateString() + " " +
-            modify_date.toLocaleTimeString());
+    if (!get_google_calc_error) {
+        interval_timer = setInterval(count_down_clock, 1000);
     }
     return false;
 }
@@ -282,10 +361,24 @@ var set_group_filter = function() {
 
 }
 
+
+//Countdown until next update
+var count_down_clock = function() {
+
+    var current_time = new Date().getTime();
+    var diff = current_time - last_updated;
+    if (diff >= update_interval) {
+        //Clear the timer, update_table will start it again
+        clearInterval(interval_timer);
+        $("#next_update").html('kollar nu');
+        update_table();
+    } else {
+        $("#next_update").html('kollar igen om '+ Math.round((update_interval - diff) / 1000) + 's');
+    }
+}
+
 var set_update_interval = function() {
     update_interval=$("#update_time_value").val();
-    clearInterval(interval_timer);
-    setInterval(update_table, update_interval);
 }
 
 
@@ -317,7 +410,7 @@ Date.prototype.setISO8601 = function (string) {
 
 
 $(document).ready(function() {
-    get_google_calc();
-    interval_timer = setInterval(update_table, update_interval);
+    interval_timer = setInterval(count_down_clock, 1000);
+
 });
 

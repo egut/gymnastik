@@ -22,18 +22,18 @@
 <div class="score"></div>
 
 <div id="option">
-<span id="status"></span>
-<form>
-    <span id='group_filter'></span>
-    <span id='update_time'>
-        <select id="update_time_value" onChange='set_update_interval()' >
-            <option value="60000">Uppdatera var minut</option>
-            <option value="300000">Uppdatera var 5 minut</option>
-            <option value="600000">Uppdatera var 10 minut</option>
-        </select>
-    </span>
-    <span><button onClick="return update_table();">Updatera nu</button></span>
-</form>
+    <span id="status"></span><span id="next_update"></span>
+    <form>
+        <span id='group_filter'></span>
+        <span id='update_time'>
+            <select id="update_time_value" onChange='set_update_interval()' >
+                <option value="60000">Uppdatera var minut</option>
+                <option value="300000">Uppdatera var 5 minut</option>
+                <option value="600000">Uppdatera var 10 minut</option>
+            </select>
+        </span>
+        <span><button onClick="return update_table();">Updatera nu</button></span>
+    </form>
 </div>
 
 <table class="template">
@@ -46,12 +46,6 @@
     </thead>
     <tbody></tbody>
 </table>
-
-
-<!-- *** TODO ***
-
- * Add different winner mode
-
--->
+<div class="status_popup" id="notification" >Startar...</div>
 </body>
 </html>
