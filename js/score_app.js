@@ -43,11 +43,11 @@ var show_notification= function(html, error){
     if (error) { 
         notification_error = true;
         html += '<form><button onClick="return update_table();">Prova igen</button></form>';
-        $('#notification').height('4em');
+        $('#notification').height('3em');
 
     } else {
         notification_error = false;
-        $('#notification').height('2em');
+        $('#notification').height('1em');
         
     }
 
@@ -178,11 +178,6 @@ var show_updated_table = function() {
             duration: [1000,200,700,200,1000],
             onComplete: function(){
                 updated = false;
-                if(group_filter != 'all') {
-                    $('#team').html(group_filter);
-                } else {
-                    $('#team').html("Alla lag");
-                }
             },
             animationSettings: {
                 up: {
@@ -205,7 +200,7 @@ var show_updated_table = function() {
         });
         table = newTable;
 
-        hide_notification('Resultatet uppdateras...');
+        hide_notification('Listan uppdateras...');
     } else {
         hide_notification('Inget att uppdatera');
     }
@@ -277,27 +272,27 @@ var array_to_table = function(array) {
                         "<table class='score'><thead>" +
                         "<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>Total</th></tr>" +
                         "</thead><tbody>" +
-                        "<tr>" +
-                        "<th>Hopp</th><td>" + line[3] +
+                        "<tr class='trampet'><th colspan='6'>Trampet</th></tr>" + 
+                        "<tr class='trampet'><td></td><td>" + line[3] +
                         "</td><td>" + line[4] +
                         "</td><td>" + line[5] +
                         "</td><td>" + line[6] +
-                        "</td><td>" + line[7] +
-                        "</td></tr>" +
-                        "<tr>" +
-                        "<th>Matta</th><td>" + line[8] +
+                        "</td><td><b>" + line[7] +
+                        "</b></td></tr>" +
+                        "<tr class='tambling'><th colspan='6'>Tambling</th></tr>" + 
+                        "<tr class='tambling'><td></td><td>" + line[8] +
                         "</td><td>" + line[9] +
                         "</td><td>" + line[10] +
                         "</td><td>" + line[11] +
-                        "</td><td>" + line[12] +
-                        "</td></tr>" +
-                        "<tr>" +
-                        "<th>Golv</th><td>" + line[13] +
+                        "</td><td><b>" + line[12] +
+                        "</b></td></tr>" +
+                        "<tr class='fristande'><th colspan='6'>Fristående</th></tr>" + 
+                        "<tr class='fristande'><td></td><td>" + line[13] +
                         "</td><td>" + line[14] +
                         "</td><td>" + line[15] +
                         "</td><td>" + line[16] +
-                        "</td><td>" + line[17] +
-                        "</td></tr>" +
+                        "</td><td><b>" + line[17] +
+                        "</b></td></tr>" +
                         "</table>"
                     });
                     cell.append(details);
@@ -335,7 +330,7 @@ var add_group_filter = function() {
     var select = $('<select/>',
         {id: 'group_list_value',
         onChange: 'set_group_filter();' });
-    var option = $('<option/>',{value: 'all', text: 'Alla'});
+    var option = $('<option/>',{value: 'all', text: 'Alla lag'});
     select.append(option);
 
     $.each(group_list, function(i, value) {
@@ -411,6 +406,5 @@ Date.prototype.setISO8601 = function (string) {
 
 $(document).ready(function() {
     interval_timer = setInterval(count_down_clock, 1000);
-
 });
 

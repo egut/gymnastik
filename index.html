@@ -20,11 +20,11 @@
 </head>
 <body>
 <div class="score"></div>
-
+<form>
 <div id="option">
     <span id="status"></span><span id="next_update"></span>
-    <form>
-        <span id='group_filter'></span>
+    
+       
         <span id='update_time'>
             <select id="update_time_value" onChange='set_update_interval()' >
                 <option value="60000">Uppdatera var minut</option>
@@ -32,20 +32,21 @@
                 <option value="600000">Uppdatera var 10 minut</option>
             </select>
         </span>
-        <span><button onClick="return update_table();">Updatera nu</button></span>
-    </form>
+        <span><button onClick="return update_table();">Uppdatera nu</button></span>
+
 </div>
 
 <table class="template">
     <thead>
         <tr>
             <th class="position anim:position">#</th>
-            <th class="team anim:id" id="team">Alla lag</th>
+            <th class="team anim:id" id="team"><span id='group_filter'></span></th>
             <th class="points anim:update">Poäng</th>
         </tr>
     </thead>
     <tbody></tbody>
 </table>
+</form>
 <div class="status_popup" id="notification" >Startar...</div>
 </body>
 </html>

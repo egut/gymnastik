@@ -12,7 +12,14 @@ html, body {
     display: none;
 }
 
-.team {
+#group_filter select {
+    font-size: 20px;    
+    color: #039;
+    background-color: #b9c9fe;
+    border-bottom: 1px solid #039; 
+}
+
+#team {
     width: 100%;
 }
 
@@ -39,13 +46,49 @@ html, body {
     color: #669;
 }
 
+/* Popup result lines */
+
+.score .trampet {
+    padding: 8px;
+    color: #039;
+    background: #b9c9fe;
+}
+
+.score .fristande {
+    padding: 8px;
+    color: #039;
+    background: #b9c9fe;
+
+}
+
+.score .tambling {
+    padding: 8px;
+    background: #e8edff;
+    color: #669;
+}
+
+.score .trampet th, .score .fristande th, .score .tambling th {
+    border-top: 1px solid #fff;
+    background: #e8edff;
+}
+
+.score .trampet td, .score .fristande td, .score .tambling td {
+    border-top: none;
+}
+
+.score b {
+    color: #039;
+    
+}
+
+
 .score tbody tr:hover td
 {
     background: #d0dafd;
 }
 
 #status, #next_update {
-    font-size: 14px;
+    font-size: 10px;
     font-style:italic;
     color: #777;
     margin-right: 0.5em;
@@ -61,6 +104,7 @@ html, body {
     margin-left: 10px;
     margin-right: 20px;
     font-size: 15px;
+    box-shadow: 10px 10px 5px #888888;
 }
 
 .popup h2 {
@@ -76,10 +120,8 @@ html, body {
     border-radius:15px;
     color:#039;
     padding:20px;
-    margin-left: auto;
-    margin-right: auto;
     width: 10em;
-    height: 2em;
+    height: 1em;
     font-size: 15px;
     text-align: center ;
     vertical-align: middle;
@@ -87,9 +129,9 @@ html, body {
     top:0;
     bottom: 0;
     left: 0;
-    right: 0;
-    
+    right: 0;   
     margin: auto;
+    box-shadow: 10px 10px 5px #888888;
 }
 
 .bClose {
@@ -109,4 +151,3 @@ html, body {
     text-decoration: none;
     border: 1px solid white;
 }
-
