@@ -11,8 +11,12 @@ var group_filter='all';
 var group_list = new Array();
 
 //Update interval
-var update_interval = 60000; //Default every minute
+var update_interval = 180000; //Default every 3:e minute
 var interval_timer = 0; //So we can stop and restart the timer
+
+//my_favo team - just high light them in the list
+var my_favo = ""
+var my_favo_list = new Array();
 
 //Note: Google remove upper case, : and space
 var google_calc_columns = ['grupp','lag',
@@ -28,8 +32,81 @@ var google_calc_default_view = [0,2,18];
 
 var notification_error = false;
 var get_google_calc_error = false;
-var hide_notification = function(html) {
 
+
+var setCookie = function (c_name,value,exdays) {
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    document.cookie=c_name + "=" + c_value;
+
+}
+
+var getCookie = function(c_name) {
+    var c_value = document.cookie;
+    var c_start = c_value.indexOf(" " + c_name + "=");
+    if (c_start == -1) {
+        c_start = c_value.indexOf(c_name + "=");
+    }
+    if (c_start == -1) {
+        c_value = null;
+    } else {
+        c_start = c_value.indexOf("=", c_start) + 1;
+        var c_end = c_value.indexOf(";", c_start);
+        if (c_end == -1) {
+            c_end = c_value.length;
+        }
+        c_value = unescape(c_value.substring(c_start,c_end));
+    }
+
+    return c_value;
+}
+
+var get_my_favo = function() {
+
+    if (my_favo == "") {
+        //my_favo not set, check cookie
+       my_favo=getCookie('my_favo'); 
+    } 
+
+    return my_favo;
+}
+
+var set_my_favo = function() {
+    //Set my favo team
+    my_favo = $("#my_favo").val();
+    setCookie('my_favo', my_favo,'2');
+    last_update_time="";
+    clearInterval(interval_timer);
+    update_table();
+
+}
+
+var update_favo_list = function(list) {
+    //Update the favo_list dropdown
+    var select = $('<select/>',
+        {id: 'my_favo',
+        onChange: 'set_my_favo();' });
+    var option = $('<option/>',{value: '', text: 'Välj lag'});
+    select.append(option);
+
+    var local_my_favo = get_my_favo();
+    $.each(my_favo_list, function(i, value) {
+        //Select prev selected when regenerate list.
+        if (local_my_favo == value) {
+            var option = $('<option/>',{selected: true, value: value, text: value});
+            select.append(option);
+        } else {
+            var option = $('<option/>',{value: value, text: value});
+            select.append(option);
+        }
+    });
+    $('#my_favo_box').html(select);
+
+
+}
+
+var hide_notification = function(html) {
     show_notification(html);
 
     if (! notification_error) {
@@ -38,8 +115,6 @@ var hide_notification = function(html) {
 }
 
 var show_notification= function(html, error){
-
-    console.log(html);
     if (error) { 
         notification_error = true;
         html += '<form><button onClick="return update_table();">Prova igen</button></form>';
@@ -53,6 +128,9 @@ var show_notification= function(html, error){
 
     $('#notification').html(html);
     $('#notification').fadeIn();
+
+    $('.popup_notification').html(html);
+    $('.popup_notification').fadeIn();
 }
 
 //If less then 3 decimals always return 2 else 3
@@ -69,7 +147,7 @@ var showAsFloat = function(n){
 var update_last_modified = function(timestamp) {
     modify_date = new Date();
     modify_date.setISO8601(timestamp);
-    $('#status').html("Senast ändrat: " +
+    $('.status').html("Senast ändrat: " +
         modify_date.toLocaleDateString() + " " +
         modify_date.toLocaleTimeString());
 }
@@ -115,6 +193,9 @@ var google_calc_to_array = function(json) {
         //Reset group_list
         group_list = new Array();
 
+        //Reset favo list
+        my_favo_list = new Array();
+
         //Loop throught all lines
         $.each(json.feed.entry, function(i,entry) {
             var line = [0]; //First field is always position
@@ -126,6 +207,10 @@ var google_calc_to_array = function(json) {
 
             if (entry['gsx$'+google_calc_team_column].$t != "") {
                 //Only add rows that have team names in them
+
+                //Add all team to favo list
+                my_favo_list.push(entry['gsx$'+google_calc_team_column].$t);
+
                  if (contest_type == 'OneWinnerWithFinal') {
                     if (group_filter != 'Final' && entry['gsx$grupp'].$t != 'Final') {
                         $.each(google_calc_columns,function(i,field) {
@@ -158,6 +243,14 @@ var google_calc_to_array = function(json) {
         });
         group_list.sort();
         add_group_filter();
+
+        //Get values in favo_list uniqe
+        my_favo_list = $.grep(my_favo_list, function(v,k) {
+            return $.inArray(v ,my_favo_list) === k;
+        });
+        my_favo_list.sort();
+        update_favo_list();
+
         //Calc position depending on contest type
         score = calc_position(tmp_score, contest_type);
     }
@@ -218,7 +311,7 @@ var show_updated_table = function() {
         });
         table = newTable;
 
-        hide_notification('Listan uppdateras...');
+        hide_notification('Listan uppdaterad');
     } else {
         hide_notification('Inget att uppdatera');
     }
@@ -273,8 +366,12 @@ var calc_position = function(array, contest_type) {
 }
 
 //Makes a table row out of an google calc line
-var line_to_row = function(line) {
+var line_to_row = function(line, favo) {
     var row = $('<tr/>');
+
+    if (favo) {
+        row.addClass('favo');
+    }
 
     $.each(google_calc_default_view, function(j, value){
         var cell = $('<td />', {
@@ -291,15 +388,15 @@ var line_to_row = function(line) {
                 "<table class='score'><thead>" +
                 "<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>Total</th></tr>" +
                 "</thead><tbody>" +
-                "<tr class='trampet'><th colspan='6'>Trampet</th></tr>" + 
-                "<tr class='trampet'><td></td><td>" + line[3] +
+                "<tr class='trampett'><th colspan='6'>Trampett</th></tr>" + 
+                "<tr class='trampett'><td></td><td>" + line[3] +
                 "</td><td>" + line[4] +
                 "</td><td>" + line[5] +
                 "</td><td>" + line[6] +
                 "</td><td><b>" + line[7] +
                 "</b></td></tr>" +
-                "<tr class='tambling'><th colspan='6'>Tambling</th></tr>" + 
-                "<tr class='tambling'><td></td><td>" + line[8] +
+                "<tr class='tumbling'><th colspan='6'>Tumbling</th></tr>" + 
+                "<tr class='tumbling'><td></td><td>" + line[8] +
                 "</td><td>" + line[9] +
                 "</td><td>" + line[10] +
                 "</td><td>" + line[11] +
@@ -344,8 +441,11 @@ var array_to_table = function(array) {
             if ( group_filter == 'all'  ||
                  group_filter == line[1] ) {
                  //If group_filer is defined use it or else all
-
-                tBody.append(line_to_row(line));
+                if (line[2] == get_my_favo()) {
+                    tBody.append(line_to_row(line,true));
+                } else {
+                    tBody.append(line_to_row(line,false));
+                }
             }
         } else if  (contest_type == 'OneWinnerWithFinal') {
             //Treat Final pool different so we get the cases:
@@ -355,7 +455,11 @@ var array_to_table = function(array) {
             if ( (group_filter == 'all'  && line[1] != 'Final')||
                  group_filter == line[1] ) {
 
-                tBody.append(line_to_row(line));
+                if (line[2] == get_my_favo()) {
+                    tBody.append(line_to_row(line,true));
+                } else {
+                    tBody.append(line_to_row(line,false));
+                }
             }  
         }
     });
@@ -412,10 +516,10 @@ var count_down_clock = function() {
     if (diff >= update_interval) {
         //Clear the timer, update_table will start it again
         clearInterval(interval_timer);
-        $("#next_update").html('kollar nu');
+        $(".next_update").html('kollar nu');
         update_table();
     } else {
-        $("#next_update").html('kollar igen om '+ Math.round((update_interval - diff) / 1000) + 's');
+        $(".next_update").html('kollar igen om '+ Math.round((update_interval - diff) / 1000) + 's');
     }
 }
 
@@ -452,6 +556,23 @@ Date.prototype.setISO8601 = function (string) {
 
 
 $(document).ready(function() {
-    interval_timer = setInterval(count_down_clock, 1000);
+    $('#view_settings').on('click',function(e) {
+        e.preventDefault();
+        $("#settings_popup").bPopup({
+            fadeSpeed: 'fast', //can be a string ('slow'/'fast') or int
+            follow: [false, false],
+            modalColor: '#b9c9fe',
+            positionStyle: 'fixed',
+            amsl: 500,
+            });
+    });
+    $("#startup_popup").bPopup({
+        fadeSpeed: 'fast', //can be a string ('slow'/'fast') or int
+        follow: [false, false],
+        modalColor: '#b9c9fe',
+        positionStyle: 'fixed',
+        amsl: 500,
+        onOpen: function() { interval_timer = setInterval(count_down_clock, 1000); }, 
+        });
 });
 

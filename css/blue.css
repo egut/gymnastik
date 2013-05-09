@@ -7,6 +7,12 @@ html, body {
     background-color: #CCC;
 }
 
+h1, h2, p {
+    margin: 0px;
+    padding: 0px;
+    margin-top: 8px;
+}
+
 #option {
     border-top: 1px solid black;
     display: none;
@@ -49,9 +55,13 @@ html, body {
     color: #669;
 }
 
+
+tr.favo {
+    font-weight: bold;
+}
 /* Popup result lines */
 
-.score .trampet {
+.score .trampett {
     padding: 8px;
     color: #039;
     background: #b9c9fe;
@@ -64,18 +74,18 @@ html, body {
 
 }
 
-.score .tambling {
+.score .tumbling {
     padding: 8px;
     background: #e8edff;
     color: #669;
 }
 
-.score .trampet th, .score .fristande th, .score .tambling th {
+.score .trampett th, .score .fristande th, .score .tumbling th {
     border-top: 1px solid #fff;
     background: #e8edff;
 }
 
-.score .trampet td, .score .fristande td, .score .tambling td {
+.score .trampett td, .score .fristande td, .score .tumbling td {
     border-top: none;
 }
 
@@ -90,7 +100,7 @@ html, body {
     background: #d0dafd;
 }
 
-#status, #next_update {
+.status, .next_update {
     font-size: 10px;
     font-style:italic;
     color: #777;
@@ -110,11 +120,43 @@ html, body {
     box-shadow: 10px 10px 5px #888888;
 }
 
+.popup h1 {
+    padding: 0.25em;
+    padding-bottom: none;
+
+    font-weight: bold;
+    color: #039;
+    font-size: 20px;
+}
+
 .popup h2 {
-    padding: 8px;
+    padding: 0.25em;
+    padding-bottom: none;
+    padding-left: none;
     font-weight: bold;
     color: #039;
     font-size: 15px;
+}
+
+#startup_popup {
+    display: block;
+    z-index: 100;
+    margin: 10px;
+
+}
+
+#settings_popup label {
+    padding: 4px;
+    padding-left: 0px;
+    font-weight: bold;
+    color: #039;
+    font-size: 12px;
+    display: block;    
+}
+
+#settings_popup i {
+    font-size: 12px;
+    display: block;
 }
 
 .status_popup {
