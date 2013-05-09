@@ -1,0 +1,27 @@
+#webbapp {
+	background: #222;
+	padding: 30px 10px 20px 10px;
+	border: 5px solid #222;
+	border-radius: 20px;
+	box-shadow: 10px 10px 5px #888888;
+	height: 570px; 
+	width: 320px;
+	float: left;
+	margin-right: 2em;
+}
+
+#webbapp iframe {
+	margin: auto;
+	height: 500px; 
+	width: 320px;
+
+
+}
+
+#webbapp p {
+	background: #444;
+	color: #FFF;
+	padding: 2px 2px 0px 2px;
+	margin: auto;
+}
+

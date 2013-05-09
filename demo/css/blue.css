@@ -1,0 +1,197 @@
+
+html, body {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 20px;
+    background-color: #CCC;
+}
+
+h1, h2, p {
+    margin: 0px;
+    padding: 0px;
+    margin-top: 8px;
+}
+
+#option {
+    border-top: 1px solid black;
+    display: none;
+}
+
+.group_filter select {
+    font-size: 16px;
+    font-weight: bold;
+    width: 10em;
+    padding: 0.25em;    
+    color: #039;
+    background-color: #b9c9fe;
+    border-bottom: 1px solid #039; 
+}
+
+#team {
+    width: 100%;
+}
+
+.score
+{
+    text-align: left;
+    width: 100%;
+    background-color: #FFF;
+    border-collapse: collapse;
+}
+
+.score th
+{
+    padding: 8px;
+    font-weight: bold;
+    color: #039;
+    background: #b9c9fe;
+}
+.score td
+{
+    padding: 8px;
+    background: #e8edff;
+    border-top: 1px solid #fff;
+    color: #669;
+}
+
+
+tr.favo {
+    font-weight: bold;
+}
+/* Popup result lines */
+
+.score .trampett {
+    padding: 8px;
+    color: #039;
+    background: #b9c9fe;
+}
+
+.score .fristande {
+    padding: 8px;
+    color: #039;
+    background: #b9c9fe;
+
+}
+
+.score .tumbling {
+    padding: 8px;
+    background: #e8edff;
+    color: #669;
+}
+
+.score .trampett th, .score .fristande th, .score .tumbling th {
+    border-top: 1px solid #fff;
+    background: #e8edff;
+}
+
+.score .trampett td, .score .fristande td, .score .tumbling td {
+    border-top: none;
+}
+
+.score b {
+    color: #039;
+
+}
+
+
+.score tbody tr:hover td
+{
+    background: #d0dafd;
+}
+
+.status, .next_update {
+    font-size: 10px;
+    font-style:italic;
+    color: #777;
+    margin-right: 0.5em;
+}
+.template { display:none }
+
+.popup {
+    background-color:#fff;
+    border-radius:15px;
+    color:#000;
+    display:none;
+    padding:20px;
+    margin-left: 10px;
+    margin-right: 20px;
+    font-size: 15px;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+.popup h1 {
+    padding: 0.25em;
+    padding-bottom: none;
+
+    font-weight: bold;
+    color: #039;
+    font-size: 20px;
+}
+
+.popup h2 {
+    padding: 0.25em;
+    padding-bottom: none;
+    padding-left: none;
+    font-weight: bold;
+    color: #039;
+    font-size: 15px;
+}
+
+#startup_popup {
+    display: block;
+    z-index: 100;
+
+}
+
+#settings_popup label {
+    padding: 4px;
+    padding-left: 0px;
+    font-weight: bold;
+    color: #039;
+    font-size: 12px;
+    display: block;    
+}
+
+#settings_popup i {
+    font-size: 12px;
+    display: block;
+}
+
+.status_popup {
+
+    background-color:#fff;
+    border-radius:15px;
+    color:#039;
+    padding:20px;
+    width: 10em;
+    height: 1em;
+    font-size: 15px;
+    text-align: center ;
+    vertical-align: middle;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;   
+    margin: auto;
+    box-shadow: 10px 10px 5px #888888;
+}
+
+.bClose {
+    border-radius: 7px 7px 7px 7px;
+    background-color: #b9c9fe;
+    font: bold 131% sans-serif;
+    padding: 0 6px 2px;
+    position: absolute;
+    right: -7px;
+    top: -7px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid white;
+}
