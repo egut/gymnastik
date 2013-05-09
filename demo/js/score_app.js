@@ -332,8 +332,11 @@ var calc_position = function(array, contest_type) {
     // This will calculate the position and change the first field to the
     // right number
 
-
     var sortingFunc = sortingFuncs.number;
+    var pre_score = 0;
+    var pre_pos = 0;
+    var current_pos = 1;
+
     if (contest_type == 'OneWinnerNoFinal' ) {
         //sort the output..
         array.sort(function(i, j){
@@ -342,9 +345,17 @@ var calc_position = function(array, contest_type) {
             //return (ascending) ? sortingFunc(i,j) : 0-sortingFunc(i,j);
             return -sortingFunc(field_i,field_j);
         });
+
         $.each(array, function(i, line) {
-            //arrays start with 0 and we need to display from 1
-            line[0]=i+1;
+            if (pre_score != line[18]) {
+                //Different score 
+                pre_score = line[18];
+                line[0] = current_pos;
+                pre_pos = current_pos;
+            } else {
+                //Same score
+                line[0] = pre_pos;
+            }
         });     
     } else if (contest_type == 'OneWinnerWithFinal') {
         //sort the output..
@@ -354,9 +365,19 @@ var calc_position = function(array, contest_type) {
             //return (ascending) ? sortingFunc(i,j) : 0-sortingFunc(i,j);
             return -sortingFunc(field_i,field_j);
         });
+
         $.each(array, function(i, line) {
-            //arrays start with 0 and we need to display from 1
-            line[0]=i+1;
+
+            if (pre_score != line[18]) {
+                //Different score 
+                pre_score = line[18];
+                line[0] = current_pos;
+                pre_pos = current_pos;
+            } else {
+                //Same score
+                line[0] = pre_pos;
+            }
+            current_pos = current_pos + 1;
         });     
     } else {
         alert('Okänd tävlingform, fix!');
@@ -575,4 +596,3 @@ $(document).ready(function() {
         onOpen: function() { interval_timer = setInterval(count_down_clock, 1000); }, 
         });
 });
-
