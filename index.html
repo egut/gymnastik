@@ -7,51 +7,123 @@
     <script type="text/javascript" src="js/animator.js"></script>
     <script type="text/javascript" src="js/rankingTableUpdate.js"></script>
     <script type="text/javascript" src="js/score_app.js"></script>
-    <script type="text/javascript" src="js/jquery.bpopup-0.7.0.min.js" ></script>
+    <script type="text/javascript" src="js/jquery.bpopup-0.9.3.min.js" ></script>
+    <!-- ******************** KONFIGURATION ****************** -->
     <script type="text/javascript">
-    var google_calc_id="0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc";
-    var google_spreadcheet_id="od6"; //od6 is normaly the first tab
-    var contest_type='OneWinnerNoFinal';
-    </script>
+        /*** Tävlings format
 
+        Giltliga värden: 
+        OneWinnerNoFinal   - Alla lagen tävlar emot varandra, den som fick flest poäng vann.
+
+        OneWinnerWithFinal - Alla lagen kvalar in i finalen de bästa lagen går vidare till final.
+                            I finalen avgörs vinnaren.
+                            Vilka lag som kommer med till finalen får man kopier manuellt i kalkylarket, 
+                            men appen sorterar lag som kommer i Final och pooler separat.
+        ***/                    
+        var contest_type='OneWinnerWithFinal';
+
+        //Googles unika id på kalkylarket
+        var google_calc_id="0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc";
+
+        //Googles id för att age bladet. Vet för närvarande inte hur man anget ett annat blad än första.
+        var google_spreadcheet_id="od6"; //od6 is normaly the first tab
+    </script>
+    <!-- ******************** SLUT KONFIGURATION ************* -->
 
     <link rel="stylesheet" href="css/blue.css" type="text/css"/>
 
 </head>
 <body>
-<div class="score"></div>
 
-<div id="option">
-<span id="status"></span>
-<form>
-    <span id='group_filter'></span>
-    <span id='update_time'>
-        <select id="update_time_value" onChange='set_update_interval()' >
-            <option value="60000">Uppdatera var minut</option>
-            <option value="300000">Uppdatera var 5 minut</option>
-            <option value="600000">Uppdatera var 10 minut</option>
-        </select>
-    </span>
-    <span><button onClick="return update_table();">Updatera nu</button></span>
-</form>
+<!-- Första popup rutan som användaren kommer att se. Den visar bara en gång. -->
+
+<div id="startup_popup" class="popup">
+    <span class='bClose'><span>X</span></span>
+    <!-- ******************** KONFIGURATION ****************** -->
+    <!-- Start av texten i popup rutan som anvädaren kommer att se -->
+
+
+
+    <h1>USM 2013</h1>
+    <p>Här kan du se resultaten för de olika lagen i truppgymnastik under tävlingarna 25 - 26 maj. Tävlingen arrangeras av Lugi Gymnastik </p>
+
+    <h2>Tävlingar</h2>
+    <p>Under USM kommer det att finnas 3 olika tävlingar, pojkar, flickor och mix. </p>
+
+    <p>Välj vilken tävling du vill följa:</p>
+    <select  onChange="window.location.href=this.value">
+        <option value="/gymnastik/index.html">Flickor</option>
+        <option value="/gymnastik/index.html">Pojkar</option>
+        <option value="/gymnastik/mix.html">Mix</option>
+    </select>
+
+
+
+
+    <!-- ******************** SLUT PÅ SISTA KONFIGURATIONEN ****************** -->
+    <!-- Texten nedan vill jag gärna att den står kvar så att andra klubbar 
+         kan hitta appen och att använda den -->
+    <h2>Information om appen</h2>
+    <p>Appen är skapad av <a href="mailto:egu@mensa.se">Erik Günther</a>. <br \> 
+    Vill du använda den har problem eller frågor titta se 
+    <a href="http://egut.github.io/gymnastik/">http://egut.github.io/gymnastik</a></p>
+
+    <!-- Slut av texten som skall visar på första popupen --> 
+    <hr />
+    <div class="popup_notification">Startar...</div>
+    <span class="status"></span><span class="next_update"></span>
+
 </div>
 
-<table class="template">
-    <thead>
-        <tr>
-            <th class="position anim:position">#</th>
-            <th class="team anim:id" id="team">Alla lag</th>
-            <th class="points anim:update">Poäng</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
+<!-- ******************** Nedan finns inget mer som du behöver konfigurera!  *********************** -->
 
+<form>
 
-<!-- *** TODO ***
+    <!-- Inställningspopupen -->
+    <div id="settings_popup" class="popup">
+        <span class='bClose'><span>X</span></span>
+        <h1>Inställningar</h1>
+        <label for="my_favo">Mitt favoritlag</label>
+            <span id="my_favo_box"><select id="my_favo">
+                <option value="">Uppdaterar...</option>
+            </select></span>
+        <br />
+        <label for="update_time_value">Hur ofta skall appen kolla efter nytt resultat</label>
+        <i>Under tävlingensgång kommer det in ett nytt resultat ungefär var 3-5 minut</i>
+            <select id="update_time_value" onChange='set_update_interval()' >
+                <option value="60000">Uppdatera var minut</option>
+                <option value="180000" selected="selected">Uppdatera var 3 minut</option>
+                <option value="300000">Uppdatera var 5 minut</option>
+                <option value="600000">Uppdatera var 10 minut</option>
+            </select>
+        <br />
+        <label for="update_now">Kolla efter nytt resultat nu</label>
+        <button onClick="return update_table();">Uppdatera nu</button>
+        <hr />
+        <div class="popup_notification">Startar...</div>
+        <span class="status"></span><span class="next_update"></span>
 
- * Add different winner mode
+    </div>
 
--->
+    <!-- Diverse element som behövs för att webbappen skall fungera som det är tänkt. -->
+    <div class="score"></div>   
+    <div id="option">
+        <span class="status"></span><span class="next_update"></span>
+        <span><button id="view_settings">Visa inställningar</button></span>
+    </div>
+
+    <table class="template">
+        <thead>
+            <tr>
+                <th class="position anim:position">#</th>
+                <th class="team anim:id" id="team"><span class='group_filter'></span></th>
+                <th class="points anim:update">Poäng</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="status_popup" id="notification" ></div>
+
+</form>
 </body>
 </html>
