@@ -286,7 +286,7 @@ var show_updated_table = function() {
         updated = false;
         var newTable = array_to_table(score);
         table.rankingTableUpdate(newTable, {
-            duration: [1000,200,700,200,1000],
+            duration: 3000,
             onComplete: function(){
                 updated = false;
             },
@@ -301,11 +301,11 @@ var show_updated_table = function() {
                 },
                 fresh: {
                     left: 0,
-                    backgroundColor: '#CCFFCC'
+                    backgroundColor: '#e8edff'
                 },
                 drop: {
                     left: 0,
-                    backgroundColor: '#FFCCCC'
+                    backgroundColor: '#ffffff'
                 }
             }
         });
@@ -396,7 +396,7 @@ var line_to_row = function(line, favo) {
 
     $.each(google_calc_default_view, function(j, value){
         var cell = $('<td />', {
-            text: line[value],
+            html: "<span class='row'>" + line[value] + "</span>",
             css: {
                 textAlign: 'left',
             }
@@ -406,7 +406,7 @@ var line_to_row = function(line, favo) {
                 class: 'popup',
                 html: "<span class='bClose'><span>X</span></span>\n" +
                 "<h2>" + line[1] + ": " + line[2] + "</h2>" +
-                "<table class='score'><thead>" +
+                "<table class='detailed_score'><thead>" +
                 "<tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>Total</th></tr>" +
                 "</thead><tbody>" +
                 "<tr class='trampett'><th colspan='6'>Trampett</th></tr>" + 

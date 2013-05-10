@@ -49,10 +49,28 @@ h1, h2, p {
 }
 .score td
 {
-    padding: 8px;
+
     background: #e8edff;
     border-top: 1px solid #fff;
     color: #669;
+}
+
+.score .row {
+    padding: 4px;
+    height: 3em;
+    display: table-cell;
+    font-size: 1em;
+    vertical-align: middle;
+}
+
+.score b {
+    color: #039;
+
+}
+
+.score tbody tr:hover td
+{
+    background: #d0dafd;
 }
 
 
@@ -61,44 +79,67 @@ tr.favo {
 }
 /* Popup result lines */
 
-.score .trampett {
+
+
+
+.detailed_score b {
+    color: #039;
+
+}
+
+.detailed_score
+{
+    text-align: left;
+    width: 100%;
+    background-color: #FFF;
+    border-collapse: collapse;
+}
+
+.detailed_score th
+{
+    padding: 8px;
+    font-weight: bold;
+    color: #039;
+    background: #b9c9fe;
+
+}
+.detailed_score td
+{
+    padding: 4px;
+    background: #e8edff;
+    border-top: 1px solid #fff;
+    color: #669;
+}
+
+.detailed_score .trampett {
     padding: 8px;
     color: #039;
     background: #b9c9fe;
 }
 
-.score .fristande {
+.detailed_score .fristande {
     padding: 8px;
     color: #039;
     background: #b9c9fe;
 
 }
 
-.score .tumbling {
+.detailed_score .tumbling {
     padding: 8px;
     background: #e8edff;
     color: #669;
 }
 
-.score .trampett th, .score .fristande th, .score .tumbling th {
+.detailed_score .trampett th, .detailed_score .fristande th, .detailed_score .tumbling th {
     border-top: 1px solid #fff;
     background: #e8edff;
+    padding-bottom: 0px;
 }
 
-.score .trampett td, .score .fristande td, .score .tumbling td {
+.detailed_score .trampett td, .detailed_score .fristande td, .detailed_score .tumbling td {
     border-top: none;
 }
 
-.score b {
-    color: #039;
-
-}
-
-
-.score tbody tr:hover td
-{
-    background: #d0dafd;
-}
 
 .status, .next_update {
     font-size: 10px;
@@ -106,6 +147,7 @@ tr.favo {
     color: #777;
     margin-right: 0.5em;
 }
+
 .template { display:none }
 
 .popup {
