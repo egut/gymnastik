@@ -22,14 +22,74 @@
         ***/                    
         var contest_type='OneWinnerWithFinal';
 
+
+
+        //For handling several score tables
+        var google_calc_map = new Array();
+        google_calc_map['flickor'] = '0AsC6LcxWhNQOdEd3bHptWlU5eTlBT3Q3NFpveFhVOVE';
+        google_calc_map['pojkar'] = '0AsC6LcxWhNQOdGVhR3lnWGpuYkx3ZXQ0bGhEaHRpWEE';
+        google_calc_map['mix'] = '0AsC6LcxWhNQOdE5jTmZQT0Jiei1QUElweTU4dzRQVkE';
+
         //Googles unika id på kalkylarket
-        var google_calc_id="0AsC6LcxWhNQOdHVwdXBIUXJoUks1Ukl2TTNHRmpBTWc";
+        var google_calc_id=google_calc_map['flickor'];
+
+        //Score table - will default to 'flickor'
+        var score_table = '';
 
         //Googles id för att age bladet. Vet för närvarande inte hur man anget ett annat blad än första.
         var google_spreadcheet_id="od6"; //od6 is normaly the first tab
+
     </script>
     <!-- ******************** SLUT KONFIGURATION ************* -->
 
+
+    <script type="text/javascript">
+
+var get_score_table = function() {
+
+    if (score_table == "") {
+        //score_table not set, check cookie
+       score_table=getCookie('score_table');
+
+    } 
+    return score_table;
+}
+
+var set_score_table = function(select_list) {
+    //Set my favo team
+    score_table = $(select_list).val();
+    setCookie('score_table', score_table,'2');
+
+    //Reset selection
+    $(".score_table").val( score_table ).attr('selected',true);
+
+    //change score table
+    google_calc_id=google_calc_map[score_table];
+
+    //Reload score tables
+    group_filter='all';
+    last_update_time="";
+    clearInterval(interval_timer);
+    update_table();
+
+}
+
+$(document).ready(function() {
+
+    //Set score table from cookie if possible
+    score_table = get_score_table();
+    if (!score_table) {
+        score_table = 'flickor';
+    }
+    //Reset selection
+    $(".score_table").val( score_table ).attr('selected',true);
+
+    //change score table
+    google_calc_id=google_calc_map[score_table];
+
+});
+
+    </script>
     <link rel="stylesheet" href="css/blue.css" type="text/css"/>
 
 </head>
@@ -51,10 +111,10 @@
     <p>Under USM kommer det att finnas 3 olika tävlingar, pojkar, flickor och mix. </p>
 
     <p>Välj vilken tävling du vill följa:</p>
-    <select  onChange="window.location.href=this.value">
-        <option value="/gymnastik/index.html">Flickor</option>
-        <option value="/gymnastik/index.html">Pojkar</option>
-        <option value="/gymnastik/mix.html">Mix</option>
+    <select  id="score_table_1" class="score_table" onChange="set_score_table('#score_table_1')">
+        <option value="flickor">USM 2013 - Flickor</option>
+        <option value="pojkar">USM 2013 - Pojkar</option>
+        <option value="mix">USM 2013 - Mix</option>
     </select>
 
 
@@ -88,6 +148,14 @@
                 <option value="">Uppdaterar...</option>
             </select></span>
         <br />
+
+        <label for="score_table_2"> Välj vilken tävling du vill följa:</label>
+        <select  id="score_table_2" class="score_table" onChange="set_score_table('#score_table_2')">
+            <option value="flickor">USM 2013 - Flickor</option>
+            <option value="pojkar">USM 2013 - Pojkar</option>
+            <option value="mix">USM 2013 - Mix</option>
+        </select>
+
         <label for="update_time_value">Hur ofta skall appen kolla efter nytt resultat</label>
         <i>Under tävlingensgång kommer det in ett nytt resultat ungefär var 3-5 minut</i>
             <select id="update_time_value" onChange='set_update_interval()' >
