@@ -140,7 +140,12 @@ tr.favo {
     border-top: none;
 }
 
+.disclamer {
+    font-size: 10px;
+    color: #F33;
+    margin-right: 0.5em;
 
+}
 .status, .next_update {
     font-size: 10px;
     font-style:italic;
